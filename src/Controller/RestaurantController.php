@@ -8,12 +8,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Restaurant;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 
 class RestaurantController extends AbstractController
 {
     /**
-     * @Route("/restaurant/", name="el tunel")
+     * @Route("/restaurant", name="createRestaurant")
      */
     public function createRestaurant(): Response
     {
@@ -22,9 +24,9 @@ class RestaurantController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $restaurant = new Restaurant();
-        $restaurant->setName('El tunel');
+        $restaurant->setName('Gran Muralla');
         $restaurant->setAddress('Calle Fuente, 14, Valencia');
-        $restaurant->setCategory('Tapas');
+        $restaurant->setCategory('Chino');
         $restaurant->setPhone('600323232');
 
       
@@ -88,7 +90,7 @@ public function delete($id)
 
 
 /**
- * @Route("/restaurant/{id}", name="el tunel")
+ * @Route("/restaurant/{id}", name="show")
  */
 public function show($id)
 {
@@ -109,27 +111,46 @@ public function show($id)
 }
 
 /**
- * @Route("/restaurants/", name="el tunel")
+ * @Route("/restaurants", name="showAll")
  */
-// public function showAll()
-// {
-//     $restaurants = $this->getDoctrine()
-//         ->getRepository(Restaurant::class)
-//         ->findAll();
+public function showAll()
+{
+    $restaurants = $this->getDoctrine()
+        ->getRepository(Restaurant::class)
+        ->findAll();
 
-//     if (!$restaurants) {
-//         throw $this->createNotFoundException(
-//             'No products found'
-//         );
-//     }
+    if (!$restaurants) {
+        throw $this->createNotFoundException(
+            'No product found for id '.$id
+        );
+    }
 
-//     $rest = new JsonResponse();
+    echo 'Se han encontrado ' . sizeof($restaurants) . ' restaurantes<br>';
 
-//     return new Response('Check out this greats restaurants: '.$restaurants);
-//     // or render a template
-//     // in the template, print things with {{ restaurant.name }}
-//     // return $this->render('restaurant/show.html.twig', ['restaurant' => $restaurant]);
-// }
+    
+    //leemos el array de restaurantes
+    for ($i = 0; $i <count($restaurants); $i++) {
+       // echo $restaurants[$i];
+        $restaurantsList[$i]= [
+            "id" => $restaurants[$i]->getId(),
+            "name" => $restaurants[$i]->getName(),
+            "address" => $restaurants[$i]->getAddress(),
+            "category" => $restaurants[$i]->getCategory()
+        ];
+    }
+
+    return new JsonResponse([
+        'restaurants'=> $restaurantsList
+    ]);
+
+    //     return new Response('Check out this greats restaurants: ' . $item);
+    
+    // or render a template
+    // in the template, print things with {{ restaurant.name }}
+    // return $this->render('restaurant/show.html.twig', ['restaurant' => $restaurant]);
+}
+
+
 
 
 }

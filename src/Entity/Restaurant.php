@@ -88,4 +88,11 @@ class Restaurant
 
         return $this;
     }
+
+    //sobreescribimos el método toString para que imprima los campos que queremos
+    public function __toString()
+    {
+       return $this-> getName() ;
+     
+    }
 }
