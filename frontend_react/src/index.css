@@ -7,3 +7,7 @@ body {
 .hidden{
   display:none;
 }
+/* estilo del botón detalles */
+.detalles{
+  margin: 0 0 20px 20px; 
+}

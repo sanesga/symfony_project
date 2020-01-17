@@ -5,8 +5,8 @@ class RestaurantDetail extends Component{
     this.props.fetchRestaurant();
   }
   componentWillReceiveProps(newprop){
-    let nextslug = newprop.match.params.slug;
-    this.props.fetchRestaurant(nextslug);
+    let nextid = newprop.match.params.id;
+    this.props.fetchRestaurant(nextid);
   }
   renderRestaurant(restaurant,loading,error){
     return (

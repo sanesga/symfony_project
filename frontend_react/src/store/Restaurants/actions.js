@@ -151,20 +151,22 @@ const shouldFetchRestaurant = (state,nextslug) => {
   return nextslug !== currentslug;
 }
 
-export const getRestaurant = (slug) => (dispatch,getState) => {
+export const getRestaurant = (id) => (dispatch,getState) => {
 
-  if(!slug){
-      dispatch(fetchRestaurantFailure('No Slug provided',slug));
+  console.log("entra en getRestaurant");
+
+  if(!id){
+      dispatch(fetchRestaurantFailure('No Id provided',id));
       return;
   }
-  if(!shouldFetchRestaurant(getState(),slug)) return Promise.resolve();
-  dispatch(fetchRestaurant(slug));
-  return requestRestaurant(slug).then((response)=>{
+  if(!shouldFetchRestaurant(getState(),id)) return Promise.resolve();
+  dispatch(fetchRestaurant(id));
+  return requestRestaurant(id).then((response)=>{
     if(!response.error){
       dispatch(fetchRestaurantSuccess(response.data));
     }
     else{
-      dispatch(fetchRestaurantFailure(response.data,slug));
+      dispatch(fetchRestaurantFailure(response.data,id));
     }
   });
 }

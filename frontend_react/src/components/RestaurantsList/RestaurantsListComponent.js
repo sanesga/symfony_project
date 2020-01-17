@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-//import {Link} from 'react-router-dom';
+import { Route, Link, Switch } from "react-router-dom";
+//import { RestaurantDetail } from '../RestaurantDetail'
 
 class RestaurantsList extends Component {
-
+  //el constructor hace los dos métodos siguientes
   // constructor(props) {
   //   super(props);
   //   this.state = {
@@ -12,56 +13,37 @@ class RestaurantsList extends Component {
   componentWillMount() {
     this.props.fetchRestaurants();
   }
- componentWillReceiveProps() {
+  componentWillReceiveProps() {
     this.props.fetchRestaurants();
   }
-  // renderRestaurants(restaurants){
-  //   return restaurants.map((restaurants)=>{
-  //     return (
-  //       <div key={restaurants.id} className="row list-item">
-  //           <h3>{restaurants.title}</h3>
-  //           <p>{restaurants.description}
-  //           <Link to={`/${restaurants.slug}/`}>Read More</Link></p>
-  //       </div>
-  //     )
-  //   })
-  // }
+
   render() {
     const { restaurants } = this.props.restaurantsList.restaurants;
-    console.log(restaurants);
-   // console.log(this.state.restaurants);
-
-   // var list = [];
-
-    // Object.keys(restaurants).forEach(function(key) {
-    //   list.push(restaurants[key]);
-    //   console.log(restaurants[key][0]);
-    // });
-
-   
-    // for (var i in restaurants) {
-    //   console.log(restaurants[i]);
-    // }
-
-    return (
-      <div>
-        <p>
-          <strong>Restaurant's List</strong>
-        </p>
-
-        {/* <div className="col-md-12">
-          { this.renderRestaurants(restaurants)}
-          </div> */}
-
-        {this.state.restaurants.map(filterItem => {
-          return (
-            <li key={filterItem}>
-              <span>{filterItem}</span>
-            </li>
-          );
-        })}
-      </div>
-    );
+    if (restaurants !== undefined) {
+      return (
+        <div>
+          <p>
+            <strong>Restaurant's List</strong>
+          </p>
+          {restaurants.map(restaurant => {
+            return (
+              <li key={restaurant.name}>
+                <span>{restaurant.name}</span>
+                <button className="detalles">
+                <Link to={`/restaurant/${restaurant.id}/`}>Detaills</Link>
+                </button>
+              </li>
+            );
+          })}
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p>No hay restaurantes registrados</p>
+        </div>
+      );
+    }
   }
 }
 
