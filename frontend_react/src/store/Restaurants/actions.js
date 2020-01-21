@@ -45,25 +45,27 @@ export const fetchRestaurantsFailure = (error,restaurant_type,params={})=>{
     params
   }
 }
-export const fetchRestaurant = (slug)=>{
+export const fetchRestaurant = (id)=>{
   return {
     type:FETCH_RESTAURANT,
-    slug
+    id
   }
 }
 
 export const fetchRestaurantSuccess = (restaurant)=>{
+ // console.log("estamos en action en fetchRestaurantSucces");
+  //console.log(restaurant);
   return {
     type: FETCH_RESTAURANT_SUCCESS,
     payload:restaurant,
   }
 }
 
-export const fetchRestaurantFailure = (error,slug)=>{
+export const fetchRestaurantFailure = (error,id)=>{
   return{
     type : FETCH_RESTAURANT_FAILURE,
     payload:error,
-    slug
+    id
   }
 }
 export const searchAction = (query,restaurant_type=RESTAURANT_TYPE.MAIN_RESTAURANTS)=>{
@@ -138,7 +140,7 @@ export const setSearchTerm = (query,restaurant_type)=>(dispatch,getState)=> {
   //dispatch(getRestaurants(restaurant_type || RESTAURANT_TYPE.MAIN_RESTAURANTS,{search:query}));
 }
 
-const shouldFetchRestaurant = (state,nextslug) => {
+const shouldFetchRestaurant = (state,nextid) => {
   /**
    * Check if restaurant  can be fetched.If the restaurant is currently loading
    * it checks if the currently loading restaurant is the requested restaurant.
@@ -147,8 +149,8 @@ const shouldFetchRestaurant = (state,nextslug) => {
    * Handle error in case multiple requests are in processing
    */
   let activeRestaurant = state.restaurants.activeRestaurant;
-  let currentslug = activeRestaurant.loading? activeRestaurant.info.slug:(activeRestaurant.restaurant?activeRestaurant.restaurant.slug:null); 
-  return nextslug !== currentslug;
+  let currentid = activeRestaurant.loading? activeRestaurant.info.id:(activeRestaurant.restaurant?activeRestaurant.restaurant.id:null); 
+  return nextid !== currentid;
 }
 
 export const getRestaurant = (id) => (dispatch,getState) => {
@@ -156,16 +158,25 @@ export const getRestaurant = (id) => (dispatch,getState) => {
   console.log("entra en getRestaurant");
 
   if(!id){
+    console.log("no hay id");
       dispatch(fetchRestaurantFailure('No Id provided',id));
       return;
   }
   if(!shouldFetchRestaurant(getState(),id)) return Promise.resolve();
+
   dispatch(fetchRestaurant(id));
+
   return requestRestaurant(id).then((response)=>{
+
+    //console.log("respuesta obtenida por request Restaurant");
+    //console.log(response.data);
+
     if(!response.error){
+
       dispatch(fetchRestaurantSuccess(response.data));
     }
     else{
+
       dispatch(fetchRestaurantFailure(response.data,id));
     }
   });

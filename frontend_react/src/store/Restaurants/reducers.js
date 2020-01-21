@@ -20,7 +20,7 @@ const INITIAL_STATE = {
     restaurant:null,
     error:null,
     //holds current state information.e.g If it is in loading state
-    //it holds the info of slug being loaded.
+    //it holds the info of id being loaded.
     //It may hold the ajax promise in case cancellation is required
     info:{}
   },
@@ -109,7 +109,7 @@ export default function(state=INITIAL_STATE,action){
      *
      */
     case FETCH_RESTAURANT:
-      return {...state,activeRestaurant:{restaurant:null,loading:true,error:null,slug:null,info:{slug:action.slug}}};
+      return {...state,activeRestaurant:{restaurant:null,loading:true,error:null,id:null,info:{id:action.id}}};
     case FETCH_RESTAURANT_SUCCESS:
       return { ...state,activeRestaurant:{restaurant:action.payload,loading:false,error:null,info:{}}};
     case FETCH_RESTAURANT_FAILURE:

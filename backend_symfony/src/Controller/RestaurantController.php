@@ -104,7 +104,18 @@ public function show($id)
         );
     }
 
-    return new Response('Check out this great restaurant: '.$restaurant->getName());
+    $data[] = [
+        "id" => $restaurant->getId(),
+        "name" => $restaurant->getName(),
+        "address" => $restaurant->getAddress(),
+        "category" => $restaurant->getCategory(),
+        "phone"=>$restaurant->getPhone()
+    ];
+
+    return new JsonResponse([
+        'success' => true,
+        'data' => $data
+    ]);
     // or render a template
     // in the template, print things with {{ restaurant.name }}
     // return $this->render('restaurant/show.html.twig', ['restaurant' => $restaurant]);

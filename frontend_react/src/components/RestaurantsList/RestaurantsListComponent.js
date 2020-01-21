@@ -1,49 +1,35 @@
 import React, { Component } from "react";
-import { Route, Link, Switch } from "react-router-dom";
-//import { RestaurantDetail } from '../RestaurantDetail'
+import { Link } from "react-router-dom";
 
-class RestaurantsList extends Component {
-  //el constructor hace los dos métodos siguientes
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     restaurants: [this.props.restaurantsList.restaurants]
-  //   };
-  // }
-  componentWillMount() {
+class RestaurantsList extends Component{
+  componentWillMount(){
     this.props.fetchRestaurants();
   }
-  componentWillReceiveProps() {
+  componentWillReceiveProps(){
     this.props.fetchRestaurants();
   }
-
-  render() {
-    const { restaurants } = this.props.restaurantsList.restaurants;
+  renderRestaurants(restaurants){
     if (restaurants !== undefined) {
+    return restaurants.map((restaurant)=>{
       return (
-        <div>
-          <p>
-            <strong>Restaurant's List</strong>
-          </p>
-          {restaurants.map(restaurant => {
-            return (
-              <li key={restaurant.name}>
-                <span>{restaurant.name}</span>
-                <button className="detalles">
-                <Link to={`/restaurant/${restaurant.id}/`}>Detaills</Link>
-                </button>
-              </li>
-            );
-          })}
+        <div key={restaurant.id} className="row list-item">
+            <h3>{restaurant.name}</h3>
+            <Link to={"/restaurant/"+restaurant.id}><button className="volver">Details</button></Link>
         </div>
-      );
-    } else {
-      return (
-        <div>
-          <p>No hay restaurantes registrados</p>
-        </div>
-      );
-    }
+      )
+    })
+  }
+  }
+  render(){
+    const { restaurants } =  this.props.restaurantsList.restaurants;
+    return(
+      <div className="container">
+          <p><strong>Restaurant's List</strong></p>
+          <div className="col-md-12">
+          { this.renderRestaurants(restaurants)}
+          </div>
+      </div>
+    );
   }
 }
 

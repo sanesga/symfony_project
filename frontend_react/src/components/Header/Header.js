@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import SearchBar from './SearchComponent';
 
 class Header extends Component{
   render(){
