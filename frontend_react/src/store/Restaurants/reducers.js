@@ -109,10 +109,16 @@ export default function(state=INITIAL_STATE,action){
      *
      */
     case FETCH_RESTAURANT:
+      //console.log("---------------------------ESTA ENTRANDO A FETCH RESTAURANT-----------------------")
       return {...state,activeRestaurant:{restaurant:null,loading:true,error:null,id:null,info:{id:action.id}}};
     case FETCH_RESTAURANT_SUCCESS:
+     // console.log("estamos en fetch restaurant SUCCES");
+     // console.log(action.payload);
+     // console.log("ESTE ES EL ACTIVE RESTAURANT***************");
+    //  console.log({ ...state,activeRestaurant:{restaurant:action.payload,loading:false,error:null,info:{}}});
       return { ...state,activeRestaurant:{restaurant:action.payload,loading:false,error:null,info:{}}};
     case FETCH_RESTAURANT_FAILURE:
+     // console.log("estamos en fetch restaurant failure");
       return { ...state,activeRestaurant:{restaurant:null,loading:false,error:action.payload,info:{}}}
 
     default:

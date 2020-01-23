@@ -24,9 +24,9 @@ class RestaurantController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         $restaurant = new Restaurant();
-        $restaurant->setName('Gran Muralla');
-        $restaurant->setAddress('Calle Fuente, 14, Valencia');
-        $restaurant->setCategory('Chino');
+        $restaurant->setName('El tunel');
+        $restaurant->setAddress('Calle Blanca, 14, Xàtiva');
+        $restaurant->setCategory('Tapas');
         $restaurant->setPhone('600323232');
 
       
@@ -113,7 +113,6 @@ public function show($id)
     ];
 
     return new JsonResponse([
-        'success' => true,
         'data' => $data
     ]);
     // or render a template

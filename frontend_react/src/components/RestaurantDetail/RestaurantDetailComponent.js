@@ -1,49 +1,58 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-class RestaurantDetail extends Component{
+class RestaurantDetail extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      initialArray: []
+    };
+  }
 
-
-  componentWillMount(){
+  componentWillMount() {
     this.props.fetchRestaurant();
   }
-  componentWillReceiveProps(newprop){
-    let nextid = newprop.match.params.id;
-    this.props.fetchRestaurant(nextid);
-  }
-  renderRestaurants(restaurant,loading,error){
-    return (
-      <div>mostrando el restaurante recibido</div>
-      // <div key={restaurant.id} className="featured">
-      //     <div className="top-image-con">
-      //         <img alt={restaurant.title} src={restaurant.featured_image} />
-      //     </div>
-      //    <h3>{restaurant.title}</h3>
-      //     <span>Thursday, September 18th, 2014</span>
-      //     <p>{restaurant.content}</p>
-      // </div>
-    );
+  componentWillReceiveProps(newprop) {
+    if (this.props.activeRestaurant.restaurant != null) {
+      //console.log(this.props.activeRestaurant.restaurant);
+      var restaurant = this.props.activeRestaurant.restaurant;
+      // console.log(restaurant.name);
+      // console.log(typeof restaurant);
+
+      var array = [];
+      array.push(restaurant.name);
+      array.push(restaurant.address);
+      array.push(restaurant.category);
+      array.push(restaurant.phone);
+
+      //console.log(array);
+
+      // console.log(typeof(array));
+
+      this.setState({
+        initialArray: array
+      });
+    }
   }
 
-  renderLoading(){
-    return <h1>Loading....</h1>
-  }
-  renderError(error){
-    return <h1>{error}</h1>
-  }
-  render(){
-    console.log("entra a restaurant detail component");
-    const { restaurant,loading,error } = this.props.activeRestaurant;
+  render() {
     return (
       <div className="row">
         <div className="col-md-12">
-          { !loading && !error && restaurant && this.renderRestaurants(restaurant,loading,error)}
+          <p>RESTAURANT DETAILS</p>
+          {/* {this.props.activeRestaurant !== null && 
+           <p>{this.props.activeRestaurant}</p> 
+          } */}
+          {/* { !loading && !error && restaurant && this.renderRestaurants(restaurant,loading,error)}
           { loading && this.renderLoading()}
-          { error && this.renderError(error)}
+          { error && this.renderError(error)} */}
+
+          {this.state.initialArray.map(a => (
+            <li key={a}>{a}</li>
+          ))}
         </div>
       </div>
-    )
+    );
   }
 }
 
 export default RestaurantDetail;
-

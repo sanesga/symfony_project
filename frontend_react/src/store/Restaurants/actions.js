@@ -54,7 +54,7 @@ export const fetchRestaurant = (id)=>{
 
 export const fetchRestaurantSuccess = (restaurant)=>{
  // console.log("estamos en action en fetchRestaurantSucces");
-  //console.log(restaurant);
+ // console.log(restaurant);
   return {
     type: FETCH_RESTAURANT_SUCCESS,
     payload:restaurant,
@@ -121,7 +121,7 @@ export const getRestaurants = (restaurant_type,params={}) => (dispatch,getState)
     return requestRestaurants(params).then((response)=>{
 
      //console.log("parametros recuperados");
-      //console.log(params);
+     // console.log(params);
 
       if(!response.error){
         dispatch(fetchRestaurantsSuccess(response.data,restaurant_type,params));
@@ -141,6 +141,8 @@ export const setSearchTerm = (query,restaurant_type)=>(dispatch,getState)=> {
 }
 
 const shouldFetchRestaurant = (state,nextid) => {
+
+ // console.log("entra a shouldFetchRestaurant");
   /**
    * Check if restaurant  can be fetched.If the restaurant is currently loading
    * it checks if the currently loading restaurant is the requested restaurant.
@@ -149,36 +151,36 @@ const shouldFetchRestaurant = (state,nextid) => {
    * Handle error in case multiple requests are in processing
    */
   let activeRestaurant = state.restaurants.activeRestaurant;
+ // console.log("recibimos el activeRestaurant");
+ // console.log(activeRestaurant);
   let currentid = activeRestaurant.loading? activeRestaurant.info.id:(activeRestaurant.restaurant?activeRestaurant.restaurant.id:null); 
   return nextid !== currentid;
 }
 
 export const getRestaurant = (id) => (dispatch,getState) => {
 
-  console.log("entra en getRestaurant");
-
-  if(!id){
-    console.log("no hay id");
-      dispatch(fetchRestaurantFailure('No Id provided',id));
-      return;
-  }
+  //console.log("entra al get restaurant");
+  // if(!id){
+  //     dispatch(fetchRestaurantFailure('No id provided',id));
+  //     return;
+  // }
   if(!shouldFetchRestaurant(getState(),id)) return Promise.resolve();
 
   dispatch(fetchRestaurant(id));
 
   return requestRestaurant(id).then((response)=>{
-
-    //console.log("respuesta obtenida por request Restaurant");
-    //console.log(response.data);
+   // console.log("respuesta desde getRestaurant en el ACTION");
+  //  console.log(response.data.data[0]);
 
     if(!response.error){
+   //   console.log("entra a restaurant succes desde el action");
 
-      dispatch(fetchRestaurantSuccess(response.data));
+      dispatch(fetchRestaurantSuccess(response.data.data[0]));
     }
     else{
-
       dispatch(fetchRestaurantFailure(response.data,id));
     }
   });
 }
+
 

@@ -1,27 +1,38 @@
-import { connect } from 'react-redux';
-import RestaurantDetailComponent from './RestaurantDetailComponent';
-import { getRestaurant } from '../../store/Restaurants/actions'; 
+import { connect } from "react-redux";
+import RestaurantDetailComponent from "./RestaurantDetailComponent";
+import { getRestaurant } from "../../store/Restaurants/actions";
 
-console.log("entra a restaurant detail");
+const mapStateToProps = (state) => {
+  //console.log("entra a mapStateToProps");
+  //console.log(state.restaurants.activeRestaurant);
 
-const mapStateToProps = (state,props) => {
+  // if(state.restaurants.activeRestaurant.restaurant!==null){
+  //     //console.log("tenemos datos");
+  //    // console.log(state.restaurants.activeRestaurant.restaurant);
 
-  console.log("Recibimos el active Restaurant");
-  console.log(state.restaurants.activeRestaurant.retaurant);
-    return {
-      activeRestaurant : state.restaurants.activeRestaurant,
-    };
-  
+  // }
+  return {
+    activeRestaurant : state.restaurants.activeRestaurant,
+  }; 
 }
+
+
 const mapDispatchToProps = (dispatch,props) => {
-  
-  console.log("entra a map dispatch to props");
+ // console.log("entra al map dispatch to props");
   return {
     fetchRestaurant: (id)=>{
+     
       id = id || props.match.params.id;
       dispatch(getRestaurant(id));
     }
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(RestaurantDetailComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RestaurantDetailComponent);
+
+
+
+

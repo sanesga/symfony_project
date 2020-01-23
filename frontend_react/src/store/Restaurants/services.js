@@ -14,7 +14,8 @@ export const requestRestaurants = (params)=>{
 }
 
 export const requestRestaurant = (id)=>{
-  console.log("estamos en getOne en el service de request restaurant");
+  //console.log(id);
+ // console.log(ROOT_URL);
   return axios({
     method: 'get',
     url: `${ROOT_URL}/restaurant/${id}/`,
