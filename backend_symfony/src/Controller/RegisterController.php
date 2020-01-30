@@ -48,9 +48,6 @@ class RegisterController extends AbstractController {
         $email = $request->request->get('email');
         $password = $request->request->get('password');
 
-     
-
-    
         $user = new User();
         $user->setEmail($email);
         $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
