@@ -10,9 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class RegisterController extends AbstractController
-{
+class RegisterController extends AbstractController {
+
+    private $passwordEncoder;
+    
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder) {
+             $this->passwordEncoder = $passwordEncoder;
+    }
     
     public function index()
     {
@@ -40,14 +46,16 @@ class RegisterController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $email = $request->request->get('email');
-        $username = $request->request->get('username');
         $password = $request->request->get('password');
+
+     
 
     
         $user = new User();
         $user->setEmail($email);
-        $user->setUsername($username);
-        $user->setPassword($password);
+        $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
+       // $user->setPassword($password);
+        $user->setRoles([]);
 
         $em->persist($user);
         $em->flush();

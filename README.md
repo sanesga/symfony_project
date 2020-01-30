@@ -47,8 +47,6 @@ Run backend:
 - http://localhost/phpmyadmin
 
 
-
-
 ## CREAR UNA ENTITY
 
 - php bin/console make:entity
@@ -61,4 +59,6 @@ Run backend:
 
 - php bin/console cache:clear
 
+### VER LAS RUTAS QUE TENEMOS
 
+- bin/console debug:router
