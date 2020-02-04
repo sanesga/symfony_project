@@ -9,15 +9,15 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 
-class SecurityController extends AbstractController
-{
+class SecurityController extends AbstractController {
+
     /**
      * @Route("/login", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils, Request $request,CsrfTokenManagerInterface $tokenManager ): Response {
 
-       
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('target_path');
         // }
@@ -27,29 +27,21 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-    
-        //IMPRIMIMOS EL TOKEN
-        //   echo "<pre>";
-        // var_dump('esto es el token:');
-        //   var_dump($tokenManager->getToken('authenticate')->getValue());
-        // echo "</pre>";
+        //recogemos el token para guardarlos en session
+           $token[] = [
+             "token" => $tokenManager->getToken('authenticate')->getValue()
+         ];
+         //los guardamos en sesion
+         $session = new Session();
+         //no hacemos start, porque symfony ya lo realiza
+         //$session->start();
 
-        //CREA EL FORMULARIO Y EL TOKEN
-        $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-
-        //CREAMOS LOS DATOS PARA ENVIAR
-
-        $data[] = [
-            "email" => $lastUsername,
-            "password" => $this->getUser()->getPassword(),
-            "token" => $tokenManager->getToken('authenticate')->getValue()
-        ];
-    
-        return new JsonResponse([
-            'data' => $data
-        ]);
+         //guardamos los datos
+         $session->set('token', $token);
+        
+        //creamos el formulario y el token
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
-    
 
     /**
      * @Route("/logout", name="app_logout")
@@ -58,40 +50,31 @@ class SecurityController extends AbstractController
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
-}
 
-//OBTENEMOS EL USUARIO DE POSTMAN
-
-    /**
-     * @Route("/login", name="app_login")
+     /**
+     * @Route("/frontend", name="frontend")
      */
-    // public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
-    // {
-    //     // if ($this->getUser()) {
-    //     //     return $this->redirectToRoute('target_path');
-    //     // }
+    public function frontend( ): Response {
 
-    //     if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
-    //         $data = json_decode($request->getContent(), true);
-    //         $request->request->replace(is_array($data) ? $data : array());
+        $password = $this->getUser()->getPassword();
 
-    //         $email = $request->request->get('email');
-    //         $password = $request->request->get('password');
-    //         $roles = $request->request->get('roles');
-
-    //         $user = new User();
-    //         $user->setEmail($email);
-    //         $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
-    //         // $user->setPassword($password);
-    //         $user->setRoles($roles);
+        //   echo "<pre>";
+        //   var_dump( $this->getUser()->getPassword());
+        // echo "</pre>";
 
 
-    //     // get the login error if there is one
-    //     $error = $authenticationUtils->getLastAuthenticationError();
-    //     // last username entered by the user
-    //     $lastUsername = $authenticationUtils->getLastUsername();
+        //iniciamos sesión
+        $session = new Session();
+       
+        $data[] = [
+            "email" => $this->getUser()->getEmail(),
+            "password" => $this->getUser()->getPassword(),
+            "token" => $session->get('token')
+        ];
 
-    //    // return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    //     }
-    //     return new Response('Error with login'); 
-    // }
+        //devolvemos los datos en forma de json
+        return new JsonResponse([
+            'data' => $data
+        ]);
+    }   
+}

@@ -7,10 +7,15 @@
 - NelmioCorsBundle (allows to send Cross-Origin Resource Sharing headers)
 - MySQL
 
-## Frontend
+## Frontend_react
 
 - React
 - Axios (client http library for Javascript)
+- Redux
+
+## Frontend_conduit
+
+- React
 - Redux
 
 ### Run backend symfony
@@ -36,11 +41,20 @@ Run backend:
 
 ### Run frontend react
 
+- install react router
+  sudo npm install react-router-dom
+
 - cd frontend_react
 - npm install
   (to force NPM to install dependencies use: sudo npm install --unsafe-perm=true --allow-root)
 - npm run start
 - http://localhost:3000/
+
+### Run frontend conduit
+
+- cd frontend_conduit
+- sudo npm install
+- sudo npm start
 
 ### Run phpMyAdmin
 
@@ -62,3 +76,7 @@ Run backend:
 ### VER LAS RUTAS QUE TENEMOS
 
 - bin/console debug:router
+
+### CREAR NUEVO CONTROLADOR
+
+- php bin/console make:entity
