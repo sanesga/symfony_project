@@ -20,6 +20,8 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+use Symfony\Component\HttpFoundation\Session\Session;
+
 class LoginAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
@@ -93,11 +95,13 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-
         // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
-       // return new RedirectResponse($this->urlGenerator->generate('/login'));
-       return new RedirectResponse('frontend');
+        //return new RedirectResponse($this->urlGenerator->generate('/login'));
+        return new RedirectResponse('saveUserData');
 
+
+     //llamamos al método del security controller que guardará los datos del usuario en sesión
+     
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
