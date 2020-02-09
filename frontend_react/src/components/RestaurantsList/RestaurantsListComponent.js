@@ -21,8 +21,6 @@ class RestaurantsList extends Component{
   }
   }
 
-  
-
 
   render(){
     const { restaurants } =  this.props.restaurantsList.restaurants;

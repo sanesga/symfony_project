@@ -40,10 +40,6 @@ class SecurityController extends AbstractController
         //recogemos el token para guardarlos en session
         $token = $tokenManager->getToken('authenticate')->getValue();
 
-        //  echo "<pre>";
-        //  var_dump( $token);
-        //  echo "</pre>";
-
         //los guardamos en sesion
         $session = new Session();
         //no hacemos start, porque symfony ya lo realiza
@@ -67,9 +63,8 @@ class SecurityController extends AbstractController
     /**
     * @Route("/userData", name="userData")
     */
-    public function userData(): Response
-    { //ESTE MÉTODO, COGE LOS DATOS DE SESIÓN Y LOS RETORNA AL FRONTEND
-
+    public function userData(): Response //ESTE MÉTODO LEE LOS DATOS DEL USUARIO QUE HA HECHO LOGIN, QUE ESTÁN GUARDADOS EN UN FICHERO TEMPORAL
+    { 
         //////////////////GUARDAR DATOS EN SESIÓN////////////////////
         //abrimos sesión
         // $session = new Session();
@@ -80,22 +75,25 @@ class SecurityController extends AbstractController
         ///////////////////////////////////////////////////////////////
 
 
-        ///////////////////////////////LEEMOS LOS DATOS DEL FICHERO TEMPORAL/////////////////////////////
+        //leemos los datos del fichero
         $seccion = file_get_contents('../publicfile.txt');
-       // var_dump($seccion);
-
+        //los pasamos a array
         $array = explode(";" , $seccion);
-
        // var_dump($array);
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //creamos el array de datos, con los datos leídos del fichero
+       
+        //los copiamos en el array de datos
         $data[] = [
             "email" => $array[0],
             "password" => $array[1],
             "token" => $array[2]
         ];
+
+        //borramos el fichero temporal
+        // $filesystem = new Filesystem();
+        // $current_dir_path = getcwd();
+        // $new_file_path = $current_dir_path . "file.txt";
+        // $filesystem->remove([$new_file_path, 'publicfile.txt']);
 
         // devolvemos los datos en forma de json
         return new JsonResponse([
@@ -106,22 +104,15 @@ class SecurityController extends AbstractController
     /**
     * @Route("/saveUserData", name="saveUserData")
     */
-    public function saveUserData(): Response
-    { //ESTE MÉTODO GUARDA LOS DATOS DEL USUARIO
+    public function saveUserData(): Response { //ESTE MÉTODO GUARDA LOS DATOS DEL USUARIO
 
-        ///////////////////////////////////////////////GUARDAMOS EN UN ARCHIVO///////////////////////////////////////////
-
-    
+        //guardamos los datos del login del usuario en un archivo
         $fsObject = new Filesystem();
         $current_dir_path = getcwd();
-    
-        // var_dump($current_dir_path);
-
-        // $file->dumpFile('file.txt', 'prueba');
-
-        //print_r("archivo creado");
+        //abrimos sesión para recuperar el token guardado anteriormente
         $session = new Session();
 
+        //creamos el fichero y guardamos los datos
         try {
             $new_file_path = $current_dir_path . "file.txt";
          
@@ -135,18 +126,11 @@ class SecurityController extends AbstractController
             echo "Error creating file at". $exception->getPath();
         }
 
-    
         // echo "<pre>";
         //   var_dump( $this->getUser()->getPassword());
         // echo "</pre>";
 
-        //creamos el array de datos de usuario
-        // $data[] = [
-        //     "email" => $this->getUser()->getEmail(),
-        //     "password" => $this->getUser()->getPassword(),
-        //     "token" => $session->get('token')
-        // ];
-
+        
         ////////////////////////////////////////GUARDAMOS EL TOKEN EN BASE DE DATOS//////////////////////////////////////
         //     $email =  $this->getUser()->getEmail();
         //     $session = new Session();
@@ -181,6 +165,7 @@ class SecurityController extends AbstractController
         ///////////////////////////////////////////////////////////////////////////
 
 
+        //hacemos un redirect al frontend que irá al método userData y recuperará los datos guardados en el fichero
         return new RedirectResponse('http://localhost:3001/successLogin');
     }
 }

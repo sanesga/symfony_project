@@ -25,6 +25,9 @@ Install libraries:
 - cd backend_symfony
 - sudo composer update
 
+- sudo composer require symfony/http-client
+- sudo composer require symfony/filesystem
+
 Run backend:
 
 - sudo symfony server:start
@@ -55,6 +58,7 @@ Run backend:
 - cd frontend_conduit
 - sudo npm install
 - sudo npm start
+- http://localhost:3001/
 
 ### Run phpMyAdmin
 
