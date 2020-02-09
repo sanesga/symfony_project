@@ -12,21 +12,23 @@ const LoggedOutView = props => {
           </Link>
         </li>
 
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link to="/login" className="nav-link">
             Sign in
           </Link>
-        </li>
+        </li> */}
 
         <li className="nav-item">
           <Link to="/register" className="nav-link">
-            Sign up
+            Registro
           </Link>
         </li>
         <li className="nav-item">
-          <Link to="/loginBackend" className="nav-link">
-            Login backend
-          </Link>
+          {/* <Link to="/loginBackend" className="nav-link">
+            Login
+          </Link> */}
+
+          <a className="nav-link" href="http://localhost:8000/login" target="_self">Login</a>
         </li>
 
       </ul>
@@ -60,10 +62,10 @@ const LoggedInView = props => {
 
         <li className="nav-item">
           <Link
-            to={`/@${props.currentUser.username}`}
+            to={`/@${props.currentUser.email}`}
             className="nav-link">
             <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username} />
-            {props.currentUser.username}
+            {props.currentUser.email}
           </Link>
         </li>
 

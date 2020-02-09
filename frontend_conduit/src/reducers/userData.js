@@ -7,7 +7,7 @@ export default (state = {}, action) => {
     case GET_USER_DATA:
       return {
         ...state,
-        data: action.payload[0].data[0]
+        data: action.payload[0].user[0]
       };
   
     default:

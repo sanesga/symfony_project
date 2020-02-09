@@ -1,14 +1,13 @@
 import React from "react";
 import { connect } from 'react-redux';
-import { GET_USER_DATA } from "../constants/actionTypes";
+import { GET_USER_DATA, LOGIN } from "../constants/actionTypes";
 import agent from '../agent';
 //import Login from '../components/Login';
 
 
 const mapStateToProps = (state) => {
-   // userData: state.userData.data
-   console.log("estamos en mapstatetoprops");
-   console.log(state);
+  // console.log("estamos en mapstatetoprops");
+  // console.log(state);
   return {
     userData: state.userData.data
   }; 
@@ -16,7 +15,9 @@ const mapStateToProps = (state) => {
  
  const mapDispatchToProps = dispatch => ({
   onLoad: (payload) =>
-    dispatch({ type: GET_USER_DATA, payload })
+    dispatch({ type: GET_USER_DATA, payload }),
+  onLogin: (datos) =>
+    dispatch({ type: LOGIN, payload: datos }),    
 });
 
 
@@ -26,6 +27,7 @@ class SuccessLogin extends React.Component {
   constructor (props){
     super(props);
     this.props.onLoad(Promise.all([agent.UserData.get()]));
+    this.props.onLogin(Promise.all([agent.UserData.get()]));
   }
 
   
@@ -38,17 +40,17 @@ class SuccessLogin extends React.Component {
 
 if(!this.props.userData){
 return false;
-}else{
-  console.log("DATOS DEL USUARIO");
-  console.log(this.props.userData);
 }
+  //console.log("DATOS DEL USUARIO");
+ // console.log(this.props.userData);
+
   
    return (
         <div className="auth-page">
           <p>Se ha hecho login con éxito</p>
            {/* <Login userData={this.props.userData}></Login>  */}
            <p>{this.props.userData.email}</p>
-           {/* <p>{this.props.userData}</p>   */}
+          <p>{this.props.userData.token}</p>   
 
  
            {/* {this.props.userData.map(userData => (
@@ -72,11 +74,13 @@ return false;
     //       {/* <Login userData={this.props.userData}></Login> */}
     //        {/* <p>{this.props.userData.email}</p>
     //       <p>{this.props.userData.token}</p>  */}
-    //       {/* {this.props.userData.map(userData => (
+
+
+    //        {this.props.userData.map(userData => (
     //         <div key={userData.email}>
     //             <p>{userData.email}</p>
     //         </div>
-    //       ))} */}
+    //       ))} 
     //     </div>
     //   );
     // }

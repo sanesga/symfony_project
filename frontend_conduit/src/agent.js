@@ -24,18 +24,23 @@ const requests = {
   put: (url, body) =>
     superagent.put(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
   post: (url, body) =>
-    superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody)
+    superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
+  responseLogout: url =>
+  superagent.get(`${API_ROOT}${url}`)
+
 };
 
 const Auth = {
   current: () =>
     requests.get('/userData'),
-  login: (email, password) =>
-    requests.post('/users/login', { user: { email, password } }),
-  register: (username, email, password) =>
-    requests.post('/users', { user: { username, email, password } }),
+  // login: (email, password) =>
+  //   requests.post('/users/login', { user: { email, password } }),
+  register: (email, password) =>
+    requests.post('/register', { email, password }),
   save: user =>
-    requests.put('/user', { user })
+    requests.put('/user', { user }),
+  logout: () => 
+  requests.responseLogout('/logout')
 };
 
 const Tags = {

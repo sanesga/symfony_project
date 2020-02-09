@@ -130,10 +130,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClickLogout: () => dispatch({ type: LOGOUT }),
+  onClickLogout: () => dispatch({ type: LOGOUT, payload:agent.Auth.logout() }),
   onSubmitForm: user =>
     dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
   onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
+ 
 });
 
 class Settings extends React.Component {

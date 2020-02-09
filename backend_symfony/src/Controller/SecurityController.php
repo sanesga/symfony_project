@@ -61,6 +61,16 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * @Route("/logoutSuccess", name="app_logout_success")
+     */
+    public function logoutSuccess()
+    {
+        return new JsonResponse([
+            'response' => 'ok' 
+        ]);
+    }
+
+    /**
     * @Route("/userData", name="userData")
     */
     public function userData(): Response //ESTE MÉTODO LEE LOS DATOS DEL USUARIO QUE HA HECHO LOGIN, QUE ESTÁN GUARDADOS EN UN FICHERO TEMPORAL
@@ -89,15 +99,16 @@ class SecurityController extends AbstractController
             "token" => $array[2]
         ];
 
-        //borramos el fichero temporal
-        // $filesystem = new Filesystem();
-        // $current_dir_path = getcwd();
-        // $new_file_path = $current_dir_path . "file.txt";
-        // $filesystem->remove([$new_file_path, 'publicfile.txt']);
+        //borramos el fichero temporal (SI BORRAMOS EL FICHERO, SI VUELVE A ENTRAR (POR EL PROMISE, DA ERROR PORQUE YA NO EXISTE, HAY QUE SOBREESCRIBIRLO))
+        //  $filesystem = new Filesystem();
+        //  $current_dir_path = getcwd();
+        //  $new_file_path = $current_dir_path . "file.txt";
+        //  $filesystem->remove([$new_file_path, 'publicfile.txt']);
+        // $filesystem->dumpFile($new_file_path,'');
 
         // devolvemos los datos en forma de json
         return new JsonResponse([
-            'data' => $data
+            'user' => $data
         ]);
     }
 
@@ -116,12 +127,12 @@ class SecurityController extends AbstractController
         try {
             $new_file_path = $current_dir_path . "file.txt";
          
-            if (!$fsObject->exists($new_file_path)) {
+            //if (!$fsObject->exists($new_file_path)) {
                 $fsObject->touch($new_file_path);
                 $fsObject->chmod($new_file_path, 0777);
                 $fsObject->dumpFile($new_file_path, $this->getUser()->getEmail().";".$this->getUser()->getPassword().";".$session->get('token'));
                 // $fsObject->appendToFile($new_file_path, "añado contenido.\n");
-            }
+            //}
         } catch (IOExceptionInterface $exception) {
             echo "Error creating file at". $exception->getPath();
         }

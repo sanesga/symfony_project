@@ -8,8 +8,8 @@ import {
 } from './constants/actionTypes';
 
 const promiseMiddleware = store => next => action => {
-  console.log("estamos en el middleware");
- console.log(action.payload);
+  //console.log("estamos en el middleware");
+ //console.log(action.payload);
   if (isPromise(action.payload)) {
     store.dispatch({ type: ASYNC_START, subtype: action.type });
 
@@ -35,7 +35,7 @@ const promiseMiddleware = store => next => action => {
        // console.log('ERROR', error);
         action.error = true;
         action.payload = error.response.body;
-        //action.payload = error.response;
+        action.payload = error.response;
         if (!action.skipTracking) {
           store.dispatch({ type: ASYNC_END, promise: action.payload });
         }
@@ -49,10 +49,13 @@ const promiseMiddleware = store => next => action => {
 };
 
 const localStorageMiddleware = store => next => action => {
-  if (action.type === REGISTER || action.type === LOGIN) {
-    if (!action.error) {
-      window.localStorage.setItem('jwt', action.payload.user.token);
-      agent.setToken(action.payload.user.token);
+ 
+    if (action.type === REGISTER || action.type === LOGIN) {
+    if (!action.error && action.payload[0].user!=="undefined") {
+      console.log("estoy en el middleware");
+      console.log(action.payload[0].user[0].token);
+      window.localStorage.setItem('jwt', action.payload[0].user[0].token);
+      agent.setToken(action.payload[0].user[0].token);
     }
   } else if (action.type === LOGOUT) {
     window.localStorage.setItem('jwt', '');
