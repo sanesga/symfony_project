@@ -1,15 +1,20 @@
-import agent from './agent';
+import agent from "./agent";
 import {
   ASYNC_START,
   ASYNC_END,
   LOGIN,
   LOGOUT,
-  REGISTER
-} from './constants/actionTypes';
+  //REGISTER
+} from "./constants/actionTypes";
 
 const promiseMiddleware = store => next => action => {
-  //console.log("estamos en el middleware");
- //console.log(action.payload);
+ 
+  if(action.tab!="undefined"){
+    //console.log("estamos en el middleware");
+    //console.log(action.tab);
+  }
+
+
   if (isPromise(action.payload)) {
     store.dispatch({ type: ASYNC_START, subtype: action.type });
 
@@ -18,9 +23,9 @@ const promiseMiddleware = store => next => action => {
 
     action.payload.then(
       res => {
-        const currentState = store.getState()
+        const currentState = store.getState();
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
+          return;
         }
         //console.log('RESULT', res);
         action.payload = res;
@@ -28,11 +33,11 @@ const promiseMiddleware = store => next => action => {
         store.dispatch(action);
       },
       error => {
-        const currentState = store.getState()
+        const currentState = store.getState();
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
-          return
+          return;
         }
-       // console.log('ERROR', error);
+        // console.log('ERROR', error);
         action.error = true;
         action.payload = error.response.body;
         action.payload = error.response;
@@ -49,16 +54,20 @@ const promiseMiddleware = store => next => action => {
 };
 
 const localStorageMiddleware = store => next => action => {
- 
-    if (action.type === REGISTER || action.type === LOGIN) {
-    if (!action.error && action.payload[0].user!=="undefined") {
-      console.log("estoy en el middleware");
-      console.log(action.payload[0].user[0].token);
-      window.localStorage.setItem('jwt', action.payload[0].user[0].token);
+  if (action.type === LOGIN) {
+
+    if (!action.error && action.payload[0].user !== "undefined") {
+
+      //console.log("estoy en el middleware");
+      //console.log(action.payload[0].user[0].token);
+
+      window.localStorage.setItem("jwt", action.payload[0].user[0].token);
       agent.setToken(action.payload[0].user[0].token);
     }
+
   } else if (action.type === LOGOUT) {
-    window.localStorage.setItem('jwt', '');
+
+    window.localStorage.setItem("jwt", "");
     agent.setToken(null);
   }
 
@@ -66,8 +75,7 @@ const localStorageMiddleware = store => next => action => {
 };
 
 function isPromise(v) {
-  return v && typeof v.then === 'function';
+  return v && typeof v.then === "function";
 }
 
-
-export { promiseMiddleware, localStorageMiddleware }
+export { promiseMiddleware, localStorageMiddleware };

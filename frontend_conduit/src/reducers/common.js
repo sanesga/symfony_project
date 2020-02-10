@@ -18,7 +18,7 @@ import {
 } from '../constants/actionTypes';
 
 const defaultState = {
-  appName: 'Conduit',
+  appName: 'Restaurants',
   token: null,
   viewChangeCounter: 0
 };
@@ -46,13 +46,14 @@ export default (state = defaultState, action) => {
         currentUser: action.error ? null : action.payload.user
       };
     case LOGIN:
-    case REGISTER:
       return {
         ...state,
         redirectTo: action.error ? null : '/',
         token: action.error ? null && action.payload[0].user!=="undefined" : action.payload[0].user[0].token,
         currentUser: action.error ? null && action.payload[0].user!=="undefined" : action.payload[0].user[0]
       };
+    case REGISTER:
+      return { ...state, redirectTo: null };
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
     case ARTICLE_PAGE_UNLOADED:

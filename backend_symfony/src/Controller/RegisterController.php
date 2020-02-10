@@ -33,9 +33,15 @@ class RegisterController extends AbstractController {
      * @Route("/register", name="register")
      */
     public function register(Request $request): Response{
+
+     
      
        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $data = json_decode($request->getContent(), true);
+
+    //     echo "<pre>";
+    //     var_dump($data);
+    //   echo "</pre>";
         
         $request->request->replace(is_array($data) ? $data : array());
 
@@ -56,7 +62,7 @@ class RegisterController extends AbstractController {
 
         $em->persist($user);
         $em->flush();
-        return new Response('Saved new user');
+        return new Response('New user saved');
     }
     return new Response('Error saving user');   
     }

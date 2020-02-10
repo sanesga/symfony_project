@@ -9,15 +9,28 @@ import {
   REGISTER_PAGE_UNLOADED
 } from '../constants/actionTypes';
 
-const mapStateToProps = state => ({ ...state.auth });
+// const mapStateToProps = state => ({ 
+//   ...state.auth,
+//   message: state.auth.message
+//  });
+
+ const mapStateToProps = (state) => {
+ // console.log("estamos en mapstatetoprops");
+  // console.log(state.auth);
+  return {
+    //userData: state.userData.data
+    ...state.auth,
+    message: state.auth.message
+  }; 
+}
 
 const mapDispatchToProps = dispatch => ({
   onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
+    dispatch({ type: UPDATE_FIELD_AUTH, key: "email", value }),
   onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
-  onChangeUsername: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
+    dispatch({ type: UPDATE_FIELD_AUTH, key: "password", value }),
+  // onChangeUsername: value =>
+  //   dispatch({ type: UPDATE_FIELD_AUTH, key: 'username', value }),
   onSubmit: (email, password) => {
     const payload = agent.Auth.register( email, password);
     dispatch({ type: REGISTER, payload })
@@ -31,7 +44,7 @@ class Register extends React.Component {
     super();
     this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
     this.changePassword = ev => this.props.onChangePassword(ev.target.value);
-    this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
+    // this.changeUsername = ev => this.props.onChangeUsername(ev.target.value);
     this.submitForm = ( email, password) => ev => {
       ev.preventDefault();
       this.props.onSubmit( email, password);
@@ -43,6 +56,9 @@ class Register extends React.Component {
   }
 
   render() {
+      //console.log("MENSAJE REGISTRO");
+  //console.log(this.props.message);
+
     const email = this.props.email;
     const password = this.props.password;
    

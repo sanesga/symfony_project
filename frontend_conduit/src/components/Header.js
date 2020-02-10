@@ -61,12 +61,13 @@ const LoggedInView = props => {
         </li>
 
         <li className="nav-item">
-          <Link
+          <p className="nav-link">{props.currentUser.email}</p>
+          {/* <Link
             to={`/@${props.currentUser.email}`}
             className="nav-link">
             <img src={props.currentUser.image} className="user-pic" alt={props.currentUser.username} />
             {props.currentUser.email}
-          </Link>
+          </Link> */}
         </li>
 
       </ul>

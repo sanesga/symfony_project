@@ -3,24 +3,26 @@ import agent from '../../agent';
 
 const Tags = props => {
   const tags = props.tags;
+ 
   if (tags) {
+    //console.log("juanantonio",tags[0].restaurants);
     return (
       <div className="tag-list">
         {
-          tags.map(tag => {
-            const handleClick = ev => {
-              ev.preventDefault();
-              props.onClickTag(tag, page => agent.Articles.byTag(tag, page), agent.Articles.byTag(tag));
-            };
+          tags[0].restaurants.map(tag => {
+            // const handleClick = ev => {
+            //   ev.preventDefault();
+            //   props.onClickTag(tag, page => agent.Articles.byTag(tag, page), agent.Articles.byTag(tag));
+            // };
 
             return (
-              <a
-                href=""
-                className="tag-default tag-pill"
-                key={tag}
-                onClick={handleClick}>
-                {tag}
+              <div>
+              <a href="" key={tag.id}>
+                {tag.name}{" "}
               </a>
+            <button type="button" className=" btn btn-success">Favorite</button>
+              <br></br><br></br>
+              </div>
             );
           })
         }
@@ -28,7 +30,7 @@ const Tags = props => {
     );
   } else {
     return (
-      <div>Loading Tags...</div>
+      <div>Loading restaurants...</div>
     );
   }
 };
