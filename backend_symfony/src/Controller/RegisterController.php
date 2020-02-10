@@ -34,8 +34,6 @@ class RegisterController extends AbstractController {
      */
     public function register(Request $request): Response{
 
-     
-     
        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $data = json_decode($request->getContent(), true);
 
@@ -44,10 +42,6 @@ class RegisterController extends AbstractController {
     //   echo "</pre>";
         
         $request->request->replace(is_array($data) ? $data : array());
-
-        // echo "<pre>";
-        //   var_dump($data['email']);
-        // echo "</pre>";
 
         $em = $this->getDoctrine()->getManager();
 
