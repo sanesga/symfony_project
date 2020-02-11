@@ -1,5 +1,17 @@
 import React from 'react';
 import agent from '../../agent';
+//import { RESTAURANT_FAVORITED, RESTAURANT_UNFAVORITED } from '../constants/actionTypes';
+
+// const mapDispatchToProps = dispatch => ({
+//   favorite: slug => dispatch({
+//     type: ARTICLE_FAVORITED,
+//     payload: agent.Articles.favorite(slug)
+//   }),
+//   unfavorite: slug => dispatch({
+//     type: ARTICLE_UNFAVORITED,
+//     payload: agent.Articles.unfavorite(slug)
+//   })
+// });
 
 const Tags = props => {
   const tags = props.tags;
@@ -36,3 +48,4 @@ const Tags = props => {
 };
 
 export default Tags;
+//export default connect(() => ({}), mapDispatchToProps)(Tags);

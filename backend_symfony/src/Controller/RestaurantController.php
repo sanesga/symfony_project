@@ -74,10 +74,12 @@ class RestaurantController extends AbstractController
         return new Response('Updated restaurant with id '.$restaurant->getId());
     }
     /**
-     * @Route("/favorite/{id}", name="addFavorite")
+     * @Route("/addfavorite/{id}", name="addFavorite")
      */
     public function addFavorite($id)
     {
+
+        //VERIFICAR QUE HAY USUARIO (que haya datos en el txt)
 
         $entityManager = $this->getDoctrine()->getManager();
         
@@ -137,9 +139,77 @@ class RestaurantController extends AbstractController
 
        
 
-
-
         return new Response('Favorite added');
+    //    return new JsonResponse([
+    //     'data' => $data
+    // ]);
+    }
+
+
+      /**
+     * @Route("/deletefavorite/{id}", name="deleteFavorite")
+     */
+    public function deleteFavorite($id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        //leemos los datos del fichero
+        $seccion = file_get_contents('../publicfile.txt');
+        //los pasamos a array
+        $array = explode(";", $seccion);
+        // var_dump($array);
+
+        //los copiamos en el array de datos
+    //     $data[] = [
+    //   "email" => $array[0],
+    //   "password" => $array[1],
+    //   "token" => $array[2]
+    //     ];
+
+       // var_dump($array[0]);
+    
+        //buscamos el restaurante
+        $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($id);
+
+        if (!$restaurant) {
+            throw $this->createNotFoundException(
+            'No restaurant found'
+        );
+        }
+        $dataRestaurant[] = [
+        "id" => $restaurant->getId(),
+        "name" => $restaurant->getName(),
+        "address" => $restaurant->getAddress(),
+        "category" => $restaurant->getCategory(),
+        "phone"=>$restaurant->getPhone()
+    ];
+
+        //buscamos el usuario (para obtener el id)
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($array[0]);
+
+        if (!$user) {
+            throw $this->createNotFoundException(
+            'No user found'
+        );
+        }
+
+        $dataUser[] = [
+        "id" => $user->getId()
+    ];
+
+        var_dump($dataUser);
+
+        //añadimos el id del usuario en el restaurante
+         $restaurant->removeUser($user);
+         $entityManager->flush();
+
+        //añadimos el id del restaurante en el usuario
+        $user->removeRestaurant($restaurant);
+        $entityManager->flush();
+
+       
+
+        return new Response('Favorite deleted');
     //    return new JsonResponse([
     //     'data' => $data
     // ]);
