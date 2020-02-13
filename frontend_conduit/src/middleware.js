@@ -10,8 +10,8 @@ import {
 const promiseMiddleware = store => next => action => {
  
   if(action.tab!="undefined"){
-    //console.log("estamos en el middleware");
-    //console.log(action.tab);
+    console.log("MIDDLEWARE");
+    console.log(action);
   }
 
 

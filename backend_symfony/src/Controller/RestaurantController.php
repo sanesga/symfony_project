@@ -61,8 +61,8 @@ class RestaurantController extends AbstractController
 
         if (!$restaurant) {
             throw $this->createNotFoundException(
-            'No restaurant found for id '.$id
-        );
+                'No restaurant found for id '.$id
+            );
         }
 
         $restaurant->setName('La picaeta de Carmeta');
@@ -73,6 +73,8 @@ class RestaurantController extends AbstractController
         // ]);
         return new Response('Updated restaurant with id '.$restaurant->getId());
     }
+
+
     /**
      * @Route("/addfavorite/{id}", name="addFavorite")
      */
@@ -90,28 +92,29 @@ class RestaurantController extends AbstractController
         // var_dump($array);
 
         //los copiamos en el array de datos
-    //     $data[] = [
-    //   "email" => $array[0],
-    //   "password" => $array[1],
-    //   "token" => $array[2]
-    //     ];
+        //     $data[] = [
+        //   "email" => $array[0],
+        //   "password" => $array[1],
+        //   "token" => $array[2]
+        //     ];
 
-       // var_dump($array[0]);
+        // var_dump($array[0]);
     
         //buscamos el restaurante
         $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($id);
 
         if (!$restaurant) {
             throw $this->createNotFoundException(
-            'No restaurant found'
-        );
+                'No restaurant found'
+            );
         }
         $dataRestaurant[] = [
         "id" => $restaurant->getId(),
         "name" => $restaurant->getName(),
         "address" => $restaurant->getAddress(),
         "category" => $restaurant->getCategory(),
-        "phone"=>$restaurant->getPhone()
+        "phone"=>$restaurant->getPhone(),
+        "favorited"=>true
     ];
 
         //buscamos el usuario (para obtener el id)
@@ -119,19 +122,19 @@ class RestaurantController extends AbstractController
 
         if (!$user) {
             throw $this->createNotFoundException(
-            'No user found'
-        );
+                'No user found'
+            );
         }
 
         $dataUser[] = [
         "id" => $user->getId()
     ];
 
-        var_dump($dataUser);
+       // var_dump($dataUser);
 
         //añadimos el id del usuario en el restaurante
-         $restaurant->addUser($user);
-         $entityManager->flush();
+        $restaurant->addUser($user);
+        $entityManager->flush();
 
         //añadimos el id del restaurante en el usuario
         $user->addRestaurant($restaurant);
@@ -139,14 +142,14 @@ class RestaurantController extends AbstractController
 
        
 
-        return new Response('Favorite added');
-    //    return new JsonResponse([
-    //     'data' => $data
-    // ]);
+       // return new Response('Favorite added');
+           return new JsonResponse([
+        'restaurant' => $dataRestaurant
+    ]);
     }
 
 
-      /**
+    /**
      * @Route("/deletefavorite/{id}", name="deleteFavorite")
      */
     public function deleteFavorite($id)
@@ -160,28 +163,29 @@ class RestaurantController extends AbstractController
         // var_dump($array);
 
         //los copiamos en el array de datos
-    //     $data[] = [
-    //   "email" => $array[0],
-    //   "password" => $array[1],
-    //   "token" => $array[2]
-    //     ];
+        //     $data[] = [
+        //   "email" => $array[0],
+        //   "password" => $array[1],
+        //   "token" => $array[2]
+        //     ];
 
-       // var_dump($array[0]);
+        // var_dump($array[0]);
     
         //buscamos el restaurante
         $restaurant = $this->getDoctrine()->getRepository(Restaurant::class)->find($id);
 
         if (!$restaurant) {
             throw $this->createNotFoundException(
-            'No restaurant found'
-        );
+                'No restaurant found'
+            );
         }
         $dataRestaurant[] = [
         "id" => $restaurant->getId(),
         "name" => $restaurant->getName(),
         "address" => $restaurant->getAddress(),
         "category" => $restaurant->getCategory(),
-        "phone"=>$restaurant->getPhone()
+        "phone"=>$restaurant->getPhone(),
+        "favorited"=>false
     ];
 
         //buscamos el usuario (para obtener el id)
@@ -189,19 +193,19 @@ class RestaurantController extends AbstractController
 
         if (!$user) {
             throw $this->createNotFoundException(
-            'No user found'
-        );
+                'No user found'
+            );
         }
 
         $dataUser[] = [
         "id" => $user->getId()
     ];
 
-        var_dump($dataUser);
+        //var_dump($dataUser);
 
         //añadimos el id del usuario en el restaurante
-         $restaurant->removeUser($user);
-         $entityManager->flush();
+        $restaurant->removeUser($user);
+        $entityManager->flush();
 
         //añadimos el id del restaurante en el usuario
         $user->removeRestaurant($restaurant);
@@ -209,10 +213,10 @@ class RestaurantController extends AbstractController
 
        
 
-        return new Response('Favorite deleted');
-    //    return new JsonResponse([
-    //     'data' => $data
-    // ]);
+       // return new Response('Favorite deleted');
+           return new JsonResponse([
+        'restaurant' => $dataRestaurant
+    ]);
     }
 
     /**
@@ -225,8 +229,8 @@ class RestaurantController extends AbstractController
 
         if (!$restaurant) {
             throw $this->createNotFoundException(
-            'No restaurant found for id '.$id
-        );
+                'No restaurant found for id '.$id
+            );
         }
 
         $entityManager->remove($restaurant);
@@ -250,8 +254,8 @@ class RestaurantController extends AbstractController
 
         if (!$restaurant) {
             throw $this->createNotFoundException(
-            'No product found for id '.$id
-        );
+                'No product found for id '.$id
+            );
         }
 
         $data[] = [
@@ -275,27 +279,68 @@ class RestaurantController extends AbstractController
      */
     public function showAll()
     {
+
+        //HACER UN IF QUE COMPRUEBE PARA CADA RESTAURANTE SI ES FAVORITO DEL USUARIO LOGUEADO Y QUE RETORNE TRUE O FALSE PARA CADA UNO
         $restaurants = $this->getDoctrine()
         ->getRepository(Restaurant::class)
         ->findAll();
 
         if (!$restaurants) {
             throw $this->createNotFoundException(
-            'No product found for id '.$id
-        );
+                'No product found for id '.$id
+            );
         }
 
+        //LEEMOS DEL FICHERO SI HAY USUARIO LOGUEADO
+
+        //leemos los datos del fichero
+        $seccion = file_get_contents('../publicfile.txt');
+
+        //si hay datos
+        if ($seccion) {
+            //los pasamos a array
+            $array = explode(";", $seccion);
+            // var_dump($array);
+        }
+
+        //buscamos el usuario (para obtener el id)
+        $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($array[0]);
+
+        if (!$user) {
+            throw $this->createNotFoundException(
+                     'No user found'
+                 );
+        }
+     
+        $dataUser[] = [
+             "id" => $user->getId()
+         ];
+
+      
         //echo 'Se han encontrado ' . sizeof($restaurants) . ' restaurantes';
 
         //copiamos el array de objetos restaurante a un array asociativo
         for ($i = 0; $i <count($restaurants); $i++) {
+
+             
+                    //per cada restaurant, obtindre la llista de usuaris que han fet like i comparem en el usuari actual, si  conincideix true, si no, false
+                    $users = $restaurants[$i]->getUsers();
+                    // var_dump(count($users));
+
+                     if(count($users)==0){
+                        $favorited = false;
+                     }else{
+                         $favorited= true;
+                     }
+            
             // echo $restaurants[$i];
             $restaurantsList[$i]= [
             "id" => $restaurants[$i]->getId(),
             "name" => $restaurants[$i]->getName(),
             "address" => $restaurants[$i]->getAddress(),
             "category" => $restaurants[$i]->getCategory(),
-            "phone"=>$restaurants[$i]->getPhone()
+            "phone"=>$restaurants[$i]->getPhone(),
+            "favorited"=>$favorited
         ];
         }
 
