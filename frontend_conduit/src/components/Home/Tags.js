@@ -40,6 +40,7 @@ const Tags = props => {
       // console.log(tag.favorited);
       props.favorite(tag.id);
     }
+    window.location.reload();
   }
 
   // const handleClick = ev => {
@@ -57,7 +58,7 @@ const Tags = props => {
   //   console.log("LOS TAGS ESTÁN VACÍOS");
   // }
   if (props.tags) {
-  //  console.log("TAGS", tags);
+  // console.log("TAGS", tags);
     return (
       <div className="tag-list">
         {tags.map(tag => {
