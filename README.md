@@ -1,11 +1,20 @@
 # symfony/react_project
 
+# Functionality
+
+- Restaurants list
+- Restaurants details
+- Login
+- Register
+- User favorites restaurants
+
 ## Backend
 
 - Symfony 5.0.2
 - Doctrine (php library for working with databases)
 - NelmioCorsBundle (allows to send Cross-Origin Resource Sharing headers)
 - MySQL
+- Twig
 
 ## Frontend_react
 

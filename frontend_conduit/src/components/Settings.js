@@ -5,12 +5,16 @@ import { connect } from 'react-redux';
 import {
   SETTINGS_SAVED,
   SETTINGS_PAGE_UNLOADED,
-  LOGOUT
+  LOGOUT,
 } from '../constants/actionTypes';
 
+
+//console.log("ENTRA A SETTINGS");
+
 class SettingsForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+
+    super(props);
 
     this.state = {
       image: '',
@@ -36,9 +40,7 @@ class SettingsForm extends React.Component {
 
       this.props.onSubmitForm(user);
     };
-  }
 
-  componentWillMount() {
     if (this.props.currentUser) {
       Object.assign(this.state, {
         image: this.props.currentUser.image || '',
@@ -47,9 +49,24 @@ class SettingsForm extends React.Component {
         email: this.props.currentUser.email
       });
     }
+
+
   }
 
-  componentWillReceiveProps(nextProps) {
+  // componentWillMount() {
+  //   if (this.props.currentUser) {
+  //     Object.assign(this.state, {
+  //       image: this.props.currentUser.image || '',
+  //       username: this.props.currentUser.username,
+  //       bio: this.props.currentUser.bio,
+  //       email: this.props.currentUser.email
+  //     });
+  //   }
+  // }
+
+  
+
+  componentDidUpdate(nextProps) {
     if (nextProps.currentUser) {
       this.setState(Object.assign({}, this.state, {
         image: nextProps.currentUser.image || '',
@@ -59,6 +76,17 @@ class SettingsForm extends React.Component {
       }));
     }
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.currentUser) {
+  //     this.setState(Object.assign({}, this.state, {
+  //       image: nextProps.currentUser.image || '',
+  //       username: nextProps.currentUser.username,
+  //       bio: nextProps.currentUser.bio,
+  //       email: nextProps.currentUser.email
+  //     }));
+  //   }
+  // }
 
   render() {
     return (
@@ -124,13 +152,26 @@ class SettingsForm extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state.settings,
-  currentUser: state.common.currentUser
-});
+// const mapStateToProps = state => ({
+//   ...state.settings,
+//   currentUser: state.common.currentUser
+  
+// });
+
+const mapStateToProps = (state) => {
+   //console.log("estamos en mapstatetoprops");
+   // console.log(state);
+    
+   return {
+    ...state.settings,
+       currentUser: state.common.currentUser
+   }; 
+ }
 
 const mapDispatchToProps = dispatch => ({
-  onClickLogout: () => dispatch({ type: LOGOUT, payload:agent.Auth.logout() }),
+  onClickLogout: () => dispatch({
+     type: LOGOUT, payload:agent.Auth.logout()
+     }),
   onSubmitForm: user =>
     dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
   onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })

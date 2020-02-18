@@ -6,42 +6,43 @@ import {
 } from "../../constants/actionTypes";
 import { connect } from "react-redux";
 
-const FAVORITED_CLASS = "btn btn-sm btn-primary";
-const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
+// const FAVORITED_CLASS = "btn btn-sm btn-primary";
+// const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
 
 const mapDispatchToProps = dispatch => ({
   favorite: id =>
     dispatch({
       type: RESTAURANT_FAVORITED,
-      payload: agent.Tags.favorite(id)
+      payload: agent.Restaurants.favorite(id)
     }),
   unfavorite: id =>
     dispatch({
       type: RESTAURANT_UNFAVORITED,
-      payload: agent.Tags.unfavorite(id)
+      payload: agent.Restaurants.unfavorite(id)
     })
 });
 
 
-const Tags = props => {
-  const tags = props.tags;
+const Restaurants = props => {
+  const restaurants = props.restaurants;
   // const favoriteButtonClass = tags.favorited ?
   //   FAVORITED_CLASS :
   //   NOT_FAVORITED_CLASS;
 
-  function handleClick(tag) {
+  function handleClick(restaurant) {
     //console.log(id);
-    if (tag.favorited) {
+    if (restaurant.favorited) {
       // console.log("si que es favorito");
       // console.log(tag.favorited);
-      props.unfavorite(tag.id);
+      props.unfavorite(restaurant.id);
     } else {
       // console.log("no es favorito");
       // console.log(tag.favorited);
-      props.favorite(tag.id);
+      props.favorite(restaurant.id);
     }
-    window.location.reload();
+    window.location.reload(); //hi haurà que fer async ComponentDidMount...await ..cridem al método this.props..
   }
+
 
   // const handleClick = ev => {
   //   ev.preventDefault();
@@ -54,33 +55,30 @@ const Tags = props => {
   //  props.favorite(tag);
   // };
 
-  // if (props.tags == "undefined") {
-  //   console.log("LOS TAGS ESTÁN VACÍOS");
-  // }
-  if (props.tags) {
+ 
+  if (props.restaurants) {
   // console.log("TAGS", tags);
     return (
-      <div className="tag-list">
-        {tags.map(tag => {
+      <div>
+        {restaurants.map(restaurant => {
           // const handleClick = ev => {
           //   ev.preventDefault();
           //   props.onClickTag(tag, page => agent.Articles.byTag(tag, page), agent.Articles.byTag(tag));
           // };
 
           return (
-            <div>
-              <a href="" key={tag.id}>
-                {tag.name}{" "}
+            <div key={restaurant.id}>
+              <a href="">
+                {restaurant.name}{" "}
               </a>
-              <p>{tag.address}</p>
-              {/* <button className="btn btn-success" onClick={handleClick(tag.id)}>Favorite</button> */}
+              <p >{restaurant.address}</p>
               {(() => {
-                switch (tag.favorited) {
+                switch (restaurant.favorited) {
                   case true:
                     return (
                       <button
                         className="btn btn-success"
-                        onClick={() => handleClick(tag)}
+                        onClick={() => handleClick(restaurant)}
                       >
                        Favorite
                       </button>
@@ -89,11 +87,13 @@ const Tags = props => {
                     return (
                       <button
                         className="btn btn-danger"
-                        onClick={() => handleClick(tag)}
+                        onClick={() => handleClick(restaurant)}
                       >
                         No favorite
                       </button>
                     );
+                    default:
+                      return false
                 }
               })()}
               <br></br>
@@ -109,4 +109,4 @@ const Tags = props => {
 };
 
 //export default Tags;
-export default connect(() => ({}), mapDispatchToProps)(Tags);
+export default connect(() => ({}), mapDispatchToProps)(Restaurants);

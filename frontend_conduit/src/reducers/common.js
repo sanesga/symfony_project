@@ -50,10 +50,11 @@ export default (state = defaultState, action) => {
         ...state,
         redirectTo: action.error ? null : '/',
         token: action.error ? null && action.payload[0].user!=="undefined" : action.payload[0].user[0].token,
-        currentUser: action.error ? null && action.payload[0].user!=="undefined" : action.payload[0].user[0]
+       // currentUser: action.error ? null && action.payload[0].user!=="undefined" : action.payload[0].user[0]
+       currentUser: JSON.parse(localStorage.getItem('user_data'))
       };
     case REGISTER:
-      return { ...state, redirectTo: null };
+      return { ...state, redirectTo: '/' };
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
     case ARTICLE_PAGE_UNLOADED:

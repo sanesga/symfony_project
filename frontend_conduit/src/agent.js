@@ -45,7 +45,7 @@ const Auth = {
   logout: () => requests.responseLogout("/logout")
 };
 
-const Tags = {
+const Restaurants = {
   getAll: () => requests.get("/restaurants"),
   unfavorite: id => requests.del(`/deletefavorite/${id}`),
   favorite: id => requests.post(`/addfavorite/${id}`)
@@ -94,7 +94,7 @@ export default {
   Auth,
   Comments,
   Profile,
-  Tags,
+  Restaurants,
   UserData,
   setToken: _token => {
     token = _token;

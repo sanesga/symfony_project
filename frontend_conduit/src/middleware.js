@@ -9,9 +9,9 @@ import {
 
 const promiseMiddleware = store => next => action => {
  
-  if(action.tab!="undefined"){
-    console.log("MIDDLEWARE");
-    console.log(action);
+  if(action.tab!=="undefined"){
+   // console.log("MIDDLEWARE");
+  //  console.log(action);
   }
 
 

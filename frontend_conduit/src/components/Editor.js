@@ -68,9 +68,15 @@ class Editor extends React.Component {
 
       this.props.onSubmit(promise);
     };
-  }
 
-  componentWillReceiveProps(nextProps) {
+       if (this.props.match.params.slug) {
+      return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
+    }
+    this.props.onLoad(null);
+  }
+  
+
+  componentDidUpdate(nextProps) {
     if (this.props.match.params.slug !== nextProps.match.params.slug) {
       if (nextProps.match.params.slug) {
         this.props.onUnload();
@@ -80,12 +86,23 @@ class Editor extends React.Component {
     }
   }
 
-  componentWillMount() {
-    if (this.props.match.params.slug) {
-      return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
-    }
-    this.props.onLoad(null);
-  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.match.params.slug !== nextProps.match.params.slug) {
+  //     if (nextProps.match.params.slug) {
+  //       this.props.onUnload();
+  //       return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
+  //     }
+  //     this.props.onLoad(null);
+  //   }
+  // }
+
+  // componentWillMount() {
+  //   if (this.props.match.params.slug) {
+  //     return this.props.onLoad(agent.Articles.get(this.props.match.params.slug));
+  //   }
+  //   this.props.onLoad(null);
+  // }
 
   componentWillUnmount() {
     this.props.onUnload();

@@ -1,23 +1,25 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { GET_USER_DATA, LOGIN } from "../constants/actionTypes";
+//import { GET_USER_DATA } from "../constants/actionTypes";
 import agent from '../agent';
+import { Redirect } from 'react-router-dom'
 //import Login from '../components/Login';
 
 
 const mapStateToProps = (state) => {
-  // console.log("estamos en mapstatetoprops");
-  // console.log(state);
   return {
-    userData: state.userData.data
+    //userData: state.userData.data
+    //cogemos el user data de local storage (lo hemos guardado al hacer login)
+    userData: JSON.parse(localStorage.getItem('user_data'))
   }; 
 }
  
  const mapDispatchToProps = dispatch => ({
   onLoad: (payload) =>
     dispatch({ type: GET_USER_DATA, payload }),
-  onLogin: (datos) =>
-    dispatch({ type: LOGIN, payload: datos }),    
+   onLogin: (datos) =>
+     dispatch({ type: LOGIN, payload: datos })
 });
 
 
@@ -28,6 +30,10 @@ class SuccessLogin extends React.Component {
     super(props);
     this.props.onLoad(Promise.all([agent.UserData.get()]));
     this.props.onLogin(Promise.all([agent.UserData.get()]));
+   //var userData= Promise.all([agent.UserData.get()]);
+   //console.log("user data " , userData);
+
+  
   }
 
   
@@ -47,10 +53,10 @@ return false;
   
    return (
         <div className="auth-page">
-          <p>Se ha hecho login con éxito</p>
+          {/* <p>Se ha hecho login con éxito</p> */}
            {/* <Login userData={this.props.userData}></Login>  */}
-           <p>{this.props.userData.email}</p>
-          <p>{this.props.userData.token}</p>   
+           {/* <p>{this.props.userData.email}</p>
+          <p>{this.props.userData.token}</p>    */}
 
  
            {/* {this.props.userData.map(userData => (
@@ -58,6 +64,7 @@ return false;
                 <p>{userData.email}</p>
             </div>
           ))}   */}
+       <Redirect to='/'></Redirect>
         </div>
       );
 

@@ -48,11 +48,11 @@ const LoggedInView = props => {
           </Link>
         </li>
 
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link to="/editor" className="nav-link">
             <i className="ion-compose"></i>&nbsp;New Post
           </Link>
-        </li>
+        </li> */}
 
         <li className="nav-item">
           <Link to="/settings" className="nav-link">

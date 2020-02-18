@@ -22,7 +22,8 @@ const mapStateToProps = state => {
   return {
     appLoaded: state.common.appLoaded,
     appName: state.common.appName,
-    currentUser: state.common.currentUser,
+    currentUser: JSON.parse(localStorage.getItem('user_data')),
+    //currentUser: state.common.currentUser,
     redirectTo: state.common.redirectTo
   }};
 
@@ -34,23 +35,42 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class App extends React.Component {
-  
-  componentWillReceiveProps(nextProps) {
+
+  constructor (props){
+    super(props);
+
+    const token = window.localStorage.getItem('jwt');
+    if (token) {
+      agent.setToken(token);
+    }
+    this.props.onLoad(token ? agent.Auth.current() : null, token);
+    
+  }
+
+   componentDidUpdate(nextProps){
     if (nextProps.redirectTo) {
       // this.context.router.replace(nextProps.redirectTo);
       store.dispatch(push(nextProps.redirectTo));
       this.props.onRedirect();
     }
   }
+  
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.redirectTo) {
+  //     // this.context.router.replace(nextProps.redirectTo);
+  //     store.dispatch(push(nextProps.redirectTo));
+  //     this.props.onRedirect();
+  //   }
+  // }
 
-  componentWillMount() {
-    const token = window.localStorage.getItem('jwt');
-    if (token) {
-      agent.setToken(token);
-    }
+  // componentWillMount() {
+  //   const token = window.localStorage.getItem('jwt');
+  //   if (token) {
+  //     agent.setToken(token);
+  //   }
 
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
-  }
+  //   this.props.onLoad(token ? agent.Auth.current() : null, token);
+  // }
 
   render() {
     if (this.props.appLoaded) {

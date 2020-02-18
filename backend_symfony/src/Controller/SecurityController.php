@@ -65,6 +65,12 @@ class SecurityController extends AbstractController
      */
     public function logoutSuccess()
     {
+        //AL HACER LOGOUT BORRAMOS LOS DATOS DEL USUARIO DEL FICHERO TEMPORAL
+        $filesystem = new Filesystem();
+         $current_dir_path = getcwd();
+         $new_file_path = $current_dir_path . "file.txt";
+        $filesystem->dumpFile($new_file_path,'');
+
         return new JsonResponse([
             'response' => 'ok' 
         ]);
