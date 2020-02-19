@@ -48,7 +48,9 @@ const Auth = {
 const Restaurants = {
   getAll: () => requests.get("/restaurants"),
   unfavorite: id => requests.del(`/deletefavorite/${id}`),
-  favorite: id => requests.post(`/addfavorite/${id}`)
+  favorite: id => requests.post(`/addfavorite/${id}`),
+  get: id => requests.get(`/restaurant/${id}`),
+
 };
 const UserData = {
   get: () => requests.get("/userData")

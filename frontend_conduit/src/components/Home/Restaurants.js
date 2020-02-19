@@ -5,6 +5,7 @@ import {
   RESTAURANT_UNFAVORITED
 } from "../../constants/actionTypes";
 import { connect } from "react-redux";
+import { Link } from 'react-router-dom';
 
 // const FAVORITED_CLASS = "btn btn-sm btn-primary";
 // const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
@@ -72,9 +73,10 @@ const Restaurants = props => {
 
           return (
             <div key={restaurant.id}>
-              <a href="">
-                {restaurant.name}{" "}
-              </a>
+              <Link to={`/restaurant/${restaurant.id}`}>
+                <h3>{restaurant.name}{" "}</h3>
+              </Link>
+             
               <p >{restaurant.address}</p>
               {(() => {
                 switch (restaurant.favorited) {
