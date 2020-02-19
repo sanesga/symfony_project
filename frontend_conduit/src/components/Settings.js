@@ -40,12 +40,12 @@ class SettingsForm extends React.Component {
     };
 
     if (this.props.currentUser) {
-     // console.log("current user", this.props.currentUser[0]);
+      // console.log("current user", this.props.currentUser[0]);
 
       Object.assign(this.state, {
-       // image: this.props.currentUser[0].image || "",
-       // username: this.props.currentUser[0].username,
-       // bio: this.props.currentUser[0].bio,
+        // image: this.props.currentUser[0].image || "",
+        // username: this.props.currentUser[0].username,
+        // bio: this.props.currentUser[0].bio,
         email: this.props.currentUser[0].email
       });
     }
@@ -63,16 +63,14 @@ class SettingsForm extends React.Component {
   // }
 
   componentDidUpdate(nextProps) {
-
-    console.log("nextprops",nextProps);
-    
+    console.log("nextprops", nextProps);
 
     if (nextProps.currentUser) {
       this.setState(
         Object.assign({}, this.state, {
-         // image: nextProps.currentUser.image || "",
-         // username: nextProps.currentUser.username,
-         // bio: nextProps.currentUser.bio,
+          // image: nextProps.currentUser.image || "",
+          // username: nextProps.currentUser.username,
+          // bio: nextProps.currentUser.bio,
           email: nextProps.currentUser[0].email
         })
       );
@@ -186,33 +184,45 @@ const mapDispatchToProps = dispatch => ({
 
 class Settings extends React.Component {
   render() {
-    return (
-      <div className="settings-page">
-        <div className="container page">
-          <div className="row">
-            <div className="col-md-6 offset-md-3 col-xs-12">
-              <h1 className="text-xs-center">Your Settings</h1>
+    if (localStorage.getItem("user_data")) {
+      const currentUser = JSON.parse(localStorage.getItem("user_data"));
+      return (
+        <div className="settings-page">
+          <div className="container page">
+            <div className="row">
+              <div className="col-md-6 offset-md-3 col-xs-12">
+                <h1 className="text-xs-center">Your Settings</h1>
 
-              <ListErrors errors={this.props.errors}></ListErrors>
+                {/* <ListErrors errors={this.props.errors}></ListErrors>
+  
+                <SettingsForm
+                  currentUser={this.props.currentUser}
+                  onSubmitForm={this.props.onSubmitForm}
+                /> */}
 
-              <SettingsForm
-                currentUser={this.props.currentUser}
-                onSubmitForm={this.props.onSubmitForm}
-              />
-
-              <hr />
-
-              <button
-                className="btn btn-outline-danger"
-                onClick={this.props.onClickLogout}
-              >
-                Or click here to logout.
-              </button>
+                <fieldset className="form-group">
+                  <input
+                    className="form-control form-control-lg"
+                    type="email"
+                    placeholder="Email"
+                    value={currentUser.email}
+                    // onChange={this.updateState("email")}
+                  />
+                </fieldset>
+                <hr />
+                <button
+                  className="btn btn-outline-danger"
+                  onClick={this.props.onClickLogout}
+                >
+                  Or click here to logout.
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return null;
   }
 }
 

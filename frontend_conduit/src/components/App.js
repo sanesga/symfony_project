@@ -58,7 +58,6 @@ class App extends React.Component {
     if (this.props.redirectTo) {
       //console.log("entra al if");
       try {
-       
         store.dispatch(push(this.props.redirectTo));
        // this.props.onRedirect();
     } finally {

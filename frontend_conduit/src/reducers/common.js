@@ -57,9 +57,6 @@ export default (state = defaultState, action) => {
        currentUser: JSON.parse(localStorage.getItem('user_data'))
       };
     case REGISTER:
-      //console.log("register");
-      
-     // return { ...state, redirectTo: '/' };
       return { ...state, redirectTo: action.error ? null : '/' }
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
