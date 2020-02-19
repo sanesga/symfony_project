@@ -130,7 +130,7 @@ class RestaurantController extends AbstractController
         "id" => $user->getId()
     ];
 
-       // var_dump($dataUser);
+        // var_dump($dataUser);
 
         //añadimos el id del usuario en el restaurante
         $restaurant->addUser($user);
@@ -141,9 +141,8 @@ class RestaurantController extends AbstractController
         $entityManager->flush();
 
        
-
-       // return new Response('Favorite added');
-           return new JsonResponse([
+        // return new Response('Favorite added');
+        return new JsonResponse([
         'restaurant' => $dataRestaurant
     ]);
     }
@@ -213,8 +212,8 @@ class RestaurantController extends AbstractController
 
        
 
-       // return new Response('Favorite deleted');
-           return new JsonResponse([
+        // return new Response('Favorite deleted');
+        return new JsonResponse([
         'restaurant' => $dataRestaurant
     ]);
     }
@@ -279,21 +278,31 @@ class RestaurantController extends AbstractController
      */
     public function showAll()
     {
-
-        //HACER UN IF QUE COMPRUEBE PARA CADA RESTAURANTE SI ES FAVORITO DEL USUARIO LOGUEADO Y QUE RETORNE TRUE O FALSE PARA CADA UNO
         $restaurants = $this->getDoctrine()
         ->getRepository(Restaurant::class)
         ->findAll();
 
         if (!$restaurants) {
             throw $this->createNotFoundException(
-                'No product found for id '.$id
+                'No restaurants found'
             );
         }
+    //echo 'Se han encontrado ' . sizeof($restaurants) . ' restaurantes';
+    
+    //recorremos los restaurantes y los cargamos en un json para ser devueltos (cuando no hay usuario)
+    for ($i = 0; $i <count($restaurants); $i++) {
+        $restaurantsRegularList[$i]= [
+            "id" => $restaurants[$i]->getId(),
+            "name" => $restaurants[$i]->getName(),
+            "address" => $restaurants[$i]->getAddress(),
+            "category" => $restaurants[$i]->getCategory(),
+            "phone"=>$restaurants[$i]->getPhone(),
+            //ponemos el favorito por defecto a false
+            "favorited"=>false
+        ];
+    }
 
         //LEEMOS DEL FICHERO SI HAY USUARIO LOGUEADO
-
-        //leemos los datos del fichero
         $seccion = file_get_contents('../publicfile.txt');
 
         //si hay datos
@@ -301,40 +310,37 @@ class RestaurantController extends AbstractController
             //los pasamos a array
             $array = explode(";", $seccion);
             // var_dump($array);
-        }
+      
+            //buscamos el usuario (para obtener el id)
+            $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($array[0]);
 
-        //buscamos el usuario (para obtener el id)
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($array[0]);
-
-        if (!$user) {
-            throw $this->createNotFoundException(
-                     'No user found'
-                 );
-        }
+            if (!$user) {
+                throw $this->createNotFoundException(
+                    'No user found'
+                );
+            }
      
-        $dataUser[] = [
+            $dataUser[] = [
              "id" => $user->getId()
          ];
 
-      
-        //echo 'Se han encontrado ' . sizeof($restaurants) . ' restaurantes';
+        
 
-        //copiamos el array de objetos restaurante a un array asociativo
-        for ($i = 0; $i <count($restaurants); $i++) {
+            //copiamos el array de objetos restaurante a un array asociativo
+            for ($i = 0; $i <count($restaurants); $i++) {
 
-             
-                    //per cada restaurant, obtindre la llista de usuaris que han fet like i comparem en el usuari actual, si  conincideix true, si no, false
-                    $users = $restaurants[$i]->getUsers();
-                    // var_dump(count($users));
-
-                     if(count($users)==0){
-                        $favorited = false;
-                     }else{
-                         $favorited= true;
-                     }
+                //per cada restaurant, obtindre la llista de usuaris que han fet like i comparem en el usuari actual, si  conincideix true, si no, false
+                $users = $restaurants[$i]->getUsers();
+                // var_dump(count($users));
+ 
+                if (count($users)==0) {
+                    $favorited = false;
+                } else {
+                    $favorited= true;
+                }
             
-            // echo $restaurants[$i];
-            $restaurantsList[$i]= [
+                // echo $restaurants[$i];
+                $restaurantsList[$i]= [
             "id" => $restaurants[$i]->getId(),
             "name" => $restaurants[$i]->getName(),
             "address" => $restaurants[$i]->getAddress(),
@@ -342,13 +348,20 @@ class RestaurantController extends AbstractController
             "phone"=>$restaurants[$i]->getPhone(),
             "favorited"=>$favorited
         ];
-        }
+            }
 
         //devolvemos el array de restaurantes en formato JSON
-        return new JsonResponse([
-        'restaurants'=> $restaurantsList
-    ]);
+            return new JsonResponse([
+                'restaurants'=> $restaurantsList
+            ]);
 
+        }
+        //devolvemos el array de restaurantes en formato JSON
+        return new JsonResponse([
+            'restaurants'=> $restaurantsRegularList
+        ]);
+        
+        
         //     return new Response('Check out this greats restaurants: ' . $item);
     
     // or render a template

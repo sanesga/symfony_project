@@ -33,8 +33,11 @@ export default (state = defaultState, action) => {
         currentUser: action.payload ? action.payload.user : null
       };
     case REDIRECT:
-      return { ...state, redirectTo: null };
+      delete state["redirectTo"];
+    //  return { ...state, redirectTo: null };
+    return { ...state };
     case LOGOUT:
+      localStorage.clear();
       return { ...state, redirectTo: '/', token: null, currentUser: null };
     case ARTICLE_SUBMITTED:
       const redirectUrl = `/article/${action.payload.article.slug}`;
@@ -54,7 +57,10 @@ export default (state = defaultState, action) => {
        currentUser: JSON.parse(localStorage.getItem('user_data'))
       };
     case REGISTER:
-      return { ...state, redirectTo: '/' };
+      //console.log("register");
+      
+     // return { ...state, redirectTo: '/' };
+      return { ...state, redirectTo: action.error ? null : '/' }
     case DELETE_ARTICLE:
       return { ...state, redirectTo: '/' };
     case ARTICLE_PAGE_UNLOADED:

@@ -24,6 +24,10 @@ const mapDispatchToProps = dispatch => ({
 
 
 const Restaurants = props => {
+
+  if(!props.restaurants){
+    return "loading";
+  }
   const restaurants = props.restaurants;
   // const favoriteButtonClass = tags.favorited ?
   //   FAVORITED_CLASS :

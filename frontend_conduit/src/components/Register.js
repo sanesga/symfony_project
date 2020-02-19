@@ -16,11 +16,13 @@ import {
 
  const mapStateToProps = (state) => {
  // console.log("estamos en mapstatetoprops");
-  // console.log(state.auth);
+
   return {
     //userData: state.userData.data
-    ...state.auth,
-    message: state.auth.message
+    //...state
+   ...state.auth,
+   message: state.auth.message,
+  // redirectTo: "/"
   }; 
 }
 

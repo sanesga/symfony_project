@@ -3,6 +3,8 @@ import { HOME_PAGE_LOADED, HOME_PAGE_UNLOADED, RESTAURANT_FAVORITED, RESTAURANT_
 export default (state = {}, action) => {
   switch (action.type) {
     case HOME_PAGE_LOADED:
+      //console.log(action);
+      
       //console.log("HOME PAGE LOADED",action.payload[0].restaurants);
       return {
         ...state,

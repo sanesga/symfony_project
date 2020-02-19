@@ -3,7 +3,7 @@ import Header from './Header';
 import React from 'react';
 import { connect } from 'react-redux';
 import { APP_LOAD, REDIRECT } from '../constants/actionTypes';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Article from '../components/Article';
 import Editor from '../components/Editor';
 import Home from '../components/Home';
@@ -19,12 +19,15 @@ import LoginBackend from '../components/LoginBackend';
 import SuccessLogin from '../components/SuccessLogin';
 
 const mapStateToProps = state => {
+  //console.log("state",state);
+  
   return {
     appLoaded: state.common.appLoaded,
     appName: state.common.appName,
     currentUser: JSON.parse(localStorage.getItem('user_data')),
     //currentUser: state.common.currentUser,
     redirectTo: state.common.redirectTo
+    //redirectTo: "/"
   }};
 
 const mapDispatchToProps = dispatch => ({
@@ -48,12 +51,40 @@ class App extends React.Component {
   }
 
    componentDidUpdate(nextProps){
-    if (nextProps.redirectTo) {
+     //console.log("nextprops",nextProps);
+     //console.log("this.props",this.props);
+
+    //console.log("entra  a did update");
+    if (this.props.redirectTo) {
+      //console.log("entra al if");
+      try {
+       
+        store.dispatch(push(this.props.redirectTo));
+       // this.props.onRedirect();
+    } finally {
+       // console.log('on redirect');
+        this.props.onRedirect();
+    }
+      
       // this.context.router.replace(nextProps.redirectTo);
-      store.dispatch(push(nextProps.redirectTo));
-      this.props.onRedirect();
+     
     }
   }
+
+//   shouldComponentUpdate(nextProps){
+//     if (nextProps.redirectTo && nextProps.redirectTo !== this.props.location.pathname) {
+//       console.log("entra al if");
+//         try {
+//             this.props.history.push(nextProps.redirectTo);
+//             console.log("fasdf");
+//             return true;
+//         } finally {
+//             console.log('on redirect');
+//             //this.props.onRedirect();
+//         }
+//     }
+//     return false;
+// }
   
   // componentWillReceiveProps(nextProps) {
   //   if (nextProps.redirectTo) {
@@ -110,4 +141,4 @@ class App extends React.Component {
 //   router: PropTypes.object.isRequired
 // };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
