@@ -323,9 +323,9 @@ class RestaurantController extends AbstractController
             $dataUser[] = [
              "id" => $user->getId()
          ];
-
-        
-
+  
+            
+            
             //copiamos el array de objetos restaurante a un array asociativo
             for ($i = 0; $i <count($restaurants); $i++) {
 
@@ -333,21 +333,48 @@ class RestaurantController extends AbstractController
                 $users = $restaurants[$i]->getUsers();
                 // var_dump(count($users));
  
-                if (count($users)==0) {
-                    $favorited = false;
-                } else {
-                    $favorited= true;
+                //recorremos los usuarios que tienen este restaurante como favorito
+                for ($j = 0; $j <count($users); $j++) {
+
+                    if ($users[$j]->getId()==$user->getId()) {
+                        $favorited = true;
+                        $restaurantsList[$i]= [
+                            "id" => $restaurants[$i]->getId(),
+                            "name" => $restaurants[$i]->getName(),
+                            "address" => $restaurants[$i]->getAddress(),
+                            "category" => $restaurants[$i]->getCategory(),
+                            "phone"=>$restaurants[$i]->getPhone(),
+                            "favorited"=>$favorited
+                        ];
+                        
+                    } else {
+                        $favorited= false;
+                        $restaurantsList[$i]= [
+                            "id" => $restaurants[$i]->getId(),
+                            "name" => $restaurants[$i]->getName(),
+                            "address" => $restaurants[$i]->getAddress(),
+                            "category" => $restaurants[$i]->getCategory(),
+                            "phone"=>$restaurants[$i]->getPhone(),
+                            "favorited"=>$favorited
+                        ];
+                    }  
+                  
                 }
+                // if (count($users)==0) {
+                //     $favorited = false;
+                // } else {
+                //     $favorited= true;
+                // }
             
                 // echo $restaurants[$i];
-                $restaurantsList[$i]= [
-            "id" => $restaurants[$i]->getId(),
-            "name" => $restaurants[$i]->getName(),
-            "address" => $restaurants[$i]->getAddress(),
-            "category" => $restaurants[$i]->getCategory(),
-            "phone"=>$restaurants[$i]->getPhone(),
-            "favorited"=>$favorited
-        ];
+        //         $restaurantsList[$i]= [
+        //     "id" => $restaurants[$i]->getId(),
+        //     "name" => $restaurants[$i]->getName(),
+        //     "address" => $restaurants[$i]->getAddress(),
+        //     "category" => $restaurants[$i]->getCategory(),
+        //     "phone"=>$restaurants[$i]->getPhone(),
+        //     "favorited"=>$favorited
+        // ];
             }
 
         //devolvemos el array de restaurantes en formato JSON
