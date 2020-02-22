@@ -1,12 +1,16 @@
 # symfony/react_project
 
+***
+
 # Functionality
 
 - Restaurants list
-- Restaurants details
+- Restaurant details
 - Login
 - Register
 - User favorites restaurants
+
+***
 
 ## Backend
 
@@ -16,16 +20,24 @@
 - MySQL
 - Twig
 
+
+***
+
 ## Frontend_react
 
 - React
 - Axios (client http library for Javascript)
 - Redux
 
+
+***
+
 ## Frontend_conduit
 
 - React
 - Redux
+
+***
 
 ### Run backend symfony
 
@@ -42,14 +54,35 @@ Run backend:
 - sudo symfony server:start
 - http://localhost:8000/
 
+***
+
+### Development
+
+## Create Entity
+
+- php bin/console make:entity
+
+## Create table
+
+- php bin/console doctrine:schema:update --force
+
+## Clean cache
+
+- php bin/console cache:clear
+
+### See existing routes
+
+- bin/console debug:router
+
+### Create controller
+
+- php bin/console make:entity
 
 ### Stop backend
 
 - sudo symfony server:stop
 
-### Clear cache
-
- - php bin/console cache:clear
+***
 
 ### Run frontend react
 
@@ -62,6 +95,8 @@ Run backend:
 - npm run start
 - http://localhost:3000/
 
+***
+
 ### Run frontend conduit
 
 - cd frontend_conduit
@@ -69,27 +104,35 @@ Run backend:
 - sudo npm start
 - http://localhost:3001/
 
+
+***
+
 ### Run phpMyAdmin
 
 - http://localhost/phpmyadmin
 
+***
 
-## CREAR UNA ENTITY
+### Docker-compose
 
-- php bin/console make:entity
+Build container:
 
-## CREAR LA TABLA
+- sudo docker-compose build
 
-- php bin/console doctrine:schema:update --force
+Run:
 
-## LIMPIAR CACHÉ
+- sudo docker-compose up
 
-- php bin/console cache:clear
+### Portainer
 
-### VER LAS RUTAS QUE TENEMOS
+- http://localhost:9000/#/home
 
-- bin/console debug:router
 
-### CREAR NUEVO CONTROLADOR
 
-- php bin/console make:entity
+vue
+cd frontend_vue
+- npm install
+- common/config.js: const API_URL = "https://conduit.productionready.io/api";
+$ npm run lint --fix
+$ npm run serve -- --port 3003 --host 0.0.0.0 --public 0.0.0.0:3003
+- http://localhost:3003/

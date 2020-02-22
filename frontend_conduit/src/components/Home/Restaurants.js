@@ -1,52 +1,22 @@
 import React from "react";
-import agent from "../../agent";
-import {
-  RESTAURANT_FAVORITED,
-  RESTAURANT_UNFAVORITED
-} from "../../constants/actionTypes";
 import { connect } from "react-redux";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 // const FAVORITED_CLASS = "btn btn-sm btn-primary";
 // const NOT_FAVORITED_CLASS = "btn btn-sm btn-outline-primary";
 
 const mapDispatchToProps = dispatch => ({
-  favorite: id =>
-    dispatch({
-      type: RESTAURANT_FAVORITED,
-      payload: agent.Restaurants.favorite(id)
-    }),
-  unfavorite: id =>
-    dispatch({
-      type: RESTAURANT_UNFAVORITED,
-      payload: agent.Restaurants.unfavorite(id)
-    })
+
 });
 
-
 const Restaurants = props => {
-
-  if(!props.restaurants){
+  if (!props.restaurants) {
     return "loading";
   }
   const restaurants = props.restaurants;
   // const favoriteButtonClass = tags.favorited ?
   //   FAVORITED_CLASS :
   //   NOT_FAVORITED_CLASS;
-
-  function handleClick(restaurant) {
-    //console.log(id);
-    if (restaurant.favorited) {
-      // console.log("si que es favorito");
-      // console.log(tag.favorited);
-      props.unfavorite(restaurant.id);
-    } else {
-      // console.log("no es favorito");
-      // console.log(tag.favorited);
-      props.favorite(restaurant.id);
-    }
-    window.location.reload(); //hi haurà que fer async ComponentDidMount...await ..cridem al método this.props..
-  }
 
 
   // const handleClick = ev => {
@@ -60,9 +30,8 @@ const Restaurants = props => {
   //  props.favorite(tag);
   // };
 
- 
   if (props.restaurants) {
-  // console.log("TAGS", tags);
+     //console.log("RESTAURANTS", restaurants);
     return (
       <div>
         {restaurants.map(restaurant => {
@@ -74,34 +43,10 @@ const Restaurants = props => {
           return (
             <div key={restaurant.id}>
               <Link to={`/restaurant/${restaurant.id}`}>
-                <h3>{restaurant.name}{" "}</h3>
+                <h3>{restaurant.name} </h3>
               </Link>
-             
-              <p >{restaurant.address}</p>
-              {(() => {
-                switch (restaurant.favorited) {
-                  case true:
-                    return (
-                      <button
-                        className="btn btn-success"
-                        onClick={() => handleClick(restaurant)}
-                      >
-                       Favorite
-                      </button>
-                    );
-                  case false:
-                    return (
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleClick(restaurant)}
-                      >
-                        No favorite
-                      </button>
-                    );
-                    default:
-                      return false
-                }
-              })()}
+
+              <p>{restaurant.address}</p>
               <br></br>
               <br></br>
             </div>
@@ -114,5 +59,4 @@ const Restaurants = props => {
   }
 };
 
-//export default Tags;
 export default connect(() => ({}), mapDispatchToProps)(Restaurants);

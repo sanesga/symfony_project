@@ -63,7 +63,7 @@ class SettingsForm extends React.Component {
   // }
 
   componentDidUpdate(nextProps) {
-    console.log("nextprops", nextProps);
+    //console.log("nextprops", nextProps);
 
     if (nextProps.currentUser) {
       this.setState(
