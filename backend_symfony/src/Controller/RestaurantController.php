@@ -275,6 +275,9 @@ class RestaurantController extends AbstractController
      */
     public function showFavorites()
     {
+        $restaurantsList=[];
+        $k=0;
+
         $restaurants = $this->getDoctrine()->getRepository(Restaurant::class)->findAll();
 
         if (!$restaurants) {
@@ -298,31 +301,33 @@ class RestaurantController extends AbstractController
                 throw $this->createNotFoundException(
                     'No user found'
                 );
-            }
-            
-            $restaurantsList=[];
-            for ($i = 0; $i <count($restaurants); $i++) {
+            }else{
+     
+                for ($i = 0; $i <count($restaurants); $i++) {
 
-                $users = $restaurants[$i]->getUsers();
-             
-                for ($j = 0; $j <count($users); $j++) {
-
-                    if ($users[$j]->getId()==$user->getId()) {
-
-                        $restaurantsList[$i]= [
-                            "id" => $restaurants[$i]->getId(),
-                            "name" => $restaurants[$i]->getName(),
-                            "address" => $restaurants[$i]->getAddress(),
-                            "category" => $restaurants[$i]->getCategory(),
-                            "phone"=>$restaurants[$i]->getPhone(),
-                            "favorited"=>true
-                        ];
+                    $users = $restaurants[$i]->getUsers();
+                 
+                    for ($j = 0; $j <count($users); $j++) {
+    
+                        if ($users[$j]->getId()==$user->getId()) {
+    
+                            $restaurantsList[$k]= [
+                                "id" => $restaurants[$i]->getId(),
+                                "name" => $restaurants[$i]->getName(),
+                                "address" => $restaurants[$i]->getAddress(),
+                                "category" => $restaurants[$i]->getCategory(),
+                                "phone"=>$restaurants[$i]->getPhone(),
+                                "favorited"=>true
+                            ];
+                            $k++;
+                        }
                     }
                 }
             }
-        }
-         return new JsonResponse([
-            'restaurants'=> $restaurantsList
-         ]);
+            
+            }
+            return new JsonResponse([
+                'restaurants'=> $restaurantsList
+             ]);
     }
 }

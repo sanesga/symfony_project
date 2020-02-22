@@ -31,6 +31,7 @@ const requests = {
   post: (url, body) =>
     superagent.post(`${API_ROOT}${url}`, body).then(responseBody),
   responseLogout: url => superagent.get(`${API_ROOT}${url}`)
+
 };
 
 const Auth = {
@@ -50,6 +51,7 @@ const Restaurants = {
   unfavorite: id => requests.del(`/deletefavorite/${id}`),
   favorite: id => requests.post(`/addfavorite/${id}`),
   get: id => requests.get(`/restaurant/${id}`),
+  getFavorites: () => requests.get("/showfavorites")
 
 };
 const UserData = {
