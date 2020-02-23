@@ -1,4 +1,3 @@
-import Banner from "./Banner";
 import React from "react";
 import Restaurants from "./Restaurants";
 import Favorites from "./Favorites";
@@ -30,20 +29,13 @@ class Home extends React.Component {
   render() {
     return (
       <div className="home-page">
-        <Banner token={this.props.token} appName={this.props.appName} />
-
         <div className="container page">
-          <div className="row">
-          
-            <div className="col-md-3">
-              <div className="sidebar">
-                <p>RESTAURANTS LIST</p>
+              <div>
+                <h2>RESTAURANTS LIST</h2>
                 <Restaurants restaurants={this.props.restaurants} />
-                <p>FAVORITE RESTAURANTS</p>
+                <h2>FAVORITE RESTAURANTS</h2>
                 <Favorites/>
               </div>
-            </div>
-          </div>
         </div>
       </div>
     );

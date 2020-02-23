@@ -19,7 +19,6 @@ import LoginBackend from '../components/LoginBackend';
 import SuccessLogin from '../components/SuccessLogin';
 
 const mapStateToProps = state => {
-  //console.log("state",state);
   
   return {
     appLoaded: state.common.appLoaded,
@@ -51,17 +50,12 @@ class App extends React.Component {
   }
 
    componentDidUpdate(nextProps){
-     //console.log("nextprops",nextProps);
-     //console.log("this.props",this.props);
 
-    //console.log("entra  a did update");
     if (this.props.redirectTo) {
-      //console.log("entra al if");
       try {
         store.dispatch(push(this.props.redirectTo));
        // this.props.onRedirect();
     } finally {
-       // console.log('on redirect');
         this.props.onRedirect();
     }
       
@@ -72,13 +66,12 @@ class App extends React.Component {
 
 //   shouldComponentUpdate(nextProps){
 //     if (nextProps.redirectTo && nextProps.redirectTo !== this.props.location.pathname) {
-//       console.log("entra al if");
 //         try {
 //             this.props.history.push(nextProps.redirectTo);
-//             console.log("fasdf");
+//          
 //             return true;
 //         } finally {
-//             console.log('on redirect');
+//        
 //             //this.props.onRedirect();
 //         }
 //     }

@@ -210,8 +210,9 @@ class RestaurantController extends AbstractController
                 throw $this->createNotFoundException(
                     'No user found'
                 );
+
             }
-     
+
             //obtenemos los usuarios que tienen el restaurante como favorito
             $users = $restaurant->getUsers();
 
@@ -240,6 +241,17 @@ class RestaurantController extends AbstractController
                 "favorited"=> false
             ];
             return new JsonResponse(['data' => $data]); 
+            
+//si no hay datos en el archivo de texto
+        }else{
+            $data[] = [
+                "id" => $restaurant->getId(),
+                "name" => $restaurant->getName(),
+                "address" => $restaurant->getAddress(),
+                "category" => $restaurant->getCategory(),
+                "phone"=>$restaurant->getPhone(),
+            ];
+            return new JsonResponse(['data' => $data]);  
         }
     }
 

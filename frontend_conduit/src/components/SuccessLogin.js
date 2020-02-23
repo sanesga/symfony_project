@@ -31,7 +31,7 @@ class SuccessLogin extends React.Component {
     this.props.onLoad(Promise.all([agent.UserData.get()]));
     this.props.onLogin(Promise.all([agent.UserData.get()]));
    //var userData= Promise.all([agent.UserData.get()]);
-   //console.log("user data " , userData);
+ 
 
   
   }
@@ -47,13 +47,12 @@ class SuccessLogin extends React.Component {
 if(!this.props.userData){
 return false;
 }
-  //console.log("DATOS DEL USUARIO");
- // console.log(this.props.userData);
+ 
 
   
    return (
         <div className="auth-page">
-          {/* <p>Se ha hecho login con éxito</p> */}
+         
            {/* <Login userData={this.props.userData}></Login>  */}
            {/* <p>{this.props.userData.email}</p>
           <p>{this.props.userData.token}</p>    */}
@@ -73,8 +72,7 @@ return false;
     // if(!this.props.userData){
     //   return null;
     // }else{
-    //   console.log("DATOS DEL USUARIO");
-    //   console.log(this.props.userData);
+  
     //   return (
     //     <div className="auth-page">
     //       <p>Se ha hecho login con éxito</p>

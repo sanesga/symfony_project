@@ -18,7 +18,7 @@ import {
 } from '../constants/actionTypes';
 
 const defaultState = {
-  appName: 'Restaurants',
+  appName: 'Dinner Club',
   token: null,
   viewChangeCounter: 0
 };

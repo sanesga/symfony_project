@@ -39,7 +39,7 @@ import {
 //     };
 
 //     if (this.props.currentUser) {
-//       // console.log("current user", this.props.currentUser[0]);
+
 
 //       Object.assign(this.state, {
 //         // image: this.props.currentUser[0].image || "",
@@ -62,7 +62,6 @@ import {
 //   // }
 
 //   componentDidUpdate(nextProps) {
-//     //console.log("nextprops", nextProps);
 
 //     if (nextProps.currentUser) {
 //       this.setState(
@@ -201,8 +200,7 @@ class Settings extends React.Component {
                   <input
                     className="form-control form-control-lg"
                     type="email"
-                    placeholder="Email"
-                    value={currentUser.email}
+                    placeholder={currentUser.email}
                     // onChange={this.updateState("email")}
                   />
                 </fieldset>

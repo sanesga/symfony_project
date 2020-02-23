@@ -10,8 +10,6 @@ import {
 const promiseMiddleware = store => next => action => {
  
   if(action.tab!=="undefined"){
-   // console.log("MIDDLEWARE");
-  //  console.log(action);
   }
 
 
@@ -27,7 +25,6 @@ const promiseMiddleware = store => next => action => {
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
           return;
         }
-        //console.log('RESULT', res);
         action.payload = res;
         store.dispatch({ type: ASYNC_END, promise: action.payload });
         store.dispatch(action);
@@ -37,7 +34,6 @@ const promiseMiddleware = store => next => action => {
         if (!skipTracking && currentState.viewChangeCounter !== currentView) {
           return;
         }
-        // console.log('ERROR', error);
         action.error = true;
         action.payload = error.response.body;
         action.payload = error.response;
@@ -57,9 +53,6 @@ const localStorageMiddleware = store => next => action => {
   if (action.type === LOGIN) {
 
     if (!action.error && action.payload[0].user !== "undefined") {
-
-      //console.log("estoy en el middleware");
-      //console.log(action.payload[0].user[0].token);
 
       window.localStorage.setItem("jwt", action.payload[0].user[0].token);
       agent.setToken(action.payload[0].user[0].token);

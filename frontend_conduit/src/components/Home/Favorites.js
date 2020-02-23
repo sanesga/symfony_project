@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 const Promise = global.Promise;
 
 const mapStateToProps = state => {
-  console.log("favorites", state.home.favorites);
   return{
     ...state,
      favorites:state.home.favorites
@@ -33,23 +32,24 @@ class Favorites extends React.Component {
     if(this.props.favorites.length===0){
       return(
         <div>
-            <p>Log in for watching your favorite restaurants.</p>
+            <p><i>You don't have any favorite restaurant added.</i></p>
         </div>
       );
     }
-   // console.log("render",this.props.favorites);
     return (
       <div>
         {this.props.favorites.map(favorite => {
-        return (
-          <div key={favorite.id}>
-            <Link to={`/restaurant/${favorite.id}`}>
-              <h3>{favorite.name} </h3>
-            </Link>
-
-            <p>{favorite.address}</p>
-            <br></br>
-            <br></br>
+         return (
+          <div className="card"key={favorite.id} >
+            <div className="card-header">{favorite.name} </div>
+            <div className="card-body">
+              <p className="card-text">
+              {favorite.address}
+              </p>
+              <Link to={`/restaurant/${favorite.id}`}>
+              <button className="btn btn-warning">More info</button>
+             </Link>
+            </div>
           </div>
         );
       })}

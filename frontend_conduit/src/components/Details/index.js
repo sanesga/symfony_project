@@ -1,8 +1,11 @@
 import React from "react";
 import agent from "../../agent";
 import { connect } from "react-redux";
-import { RESTAURANT_DETAIL,  RESTAURANT_FAVORITED,
-  RESTAURANT_UNFAVORITED } from "../../constants/actionTypes";
+import {
+  RESTAURANT_DETAIL,
+  RESTAURANT_FAVORITED,
+  RESTAURANT_UNFAVORITED
+} from "../../constants/actionTypes";
 
 const mapStateToProps = state => ({
   ...state.article,
@@ -33,19 +36,11 @@ class Restaurant extends React.Component {
   }
 
   cambiarFav(restaurant) {
-
-    //console.log(restaurant.id);
-
     if (restaurant.favorited) {
-      // console.log("si que es favorito");
-      // console.log(tag.favorited);
       this.props.unfavorite(restaurant.id);
     } else {
-      // console.log("no es favorito");
-      // console.log(tag.favorited);
       this.props.favorite(restaurant.id);
     }
-   // window.location.reload(); //hi haurà que fer async ComponentDidMount...await ..cridem al método this.props..
   }
 
   render() {
@@ -55,34 +50,49 @@ class Restaurant extends React.Component {
 
     return (
       <div>
-        <p>Name: {this.props.restaurant.name}</p>
-        <p>Address: {this.props.restaurant.address}</p>
-        <p>Category: {this.props.restaurant.category}</p>
-        <p>Phone: {this.props.restaurant.phone}</p>
-        {(() => {
-          switch (this.props.restaurant.favorited) {
-            case true:
-              return (
-                <button
-                  className="btn btn-success"
-                  onClick={() => this.cambiarFav(this.props.restaurant)}
-                >
-                  Favorite
-                </button>
-              );
-            case false:
-              return (
-                <button
-                  className="btn btn-danger"
-                  onClick={() => this.cambiarFav(this.props.restaurant)}
-                >
-                  No favorite
-                </button>
-              );
-            default:
-              return false;
-          }
-        })()}
+        <div className="home-page">
+          <div className="container page">
+            <h2>MORE INFO</h2>
+            <div className="more-info">
+              <p>
+                <span>Name:</span> {this.props.restaurant.name}
+              </p>
+              <p>
+                <span>Address:</span> {this.props.restaurant.address}
+              </p>
+              <p>
+                <span>Category:</span> {this.props.restaurant.category}
+              </p>
+              <p>
+                <span>Phone:</span> {this.props.restaurant.phone}
+              </p>
+              {(() => {
+                switch (this.props.restaurant.favorited) {
+                  case true:
+                    return (
+                      <button
+                        className="btn btn-warning"
+                        onClick={() => this.cambiarFav(this.props.restaurant)}
+                      >
+                        Favorite
+                      </button>
+                    );
+                  case false:
+                    return (
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => this.cambiarFav(this.props.restaurant)}
+                      >
+                        No favorite
+                      </button>
+                    );
+                  default:
+                    return false;
+                }
+              })()}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
