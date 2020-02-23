@@ -83,7 +83,6 @@ class Register extends React.Component {
                       className="form-control form-control-lg"
                       type="password"
                       placeholder="Password"
-                      // value={this.props.password}
                       onChange={this.guardar}
                       name="password" />
                   </fieldset>

@@ -9,6 +9,7 @@
 - Login
 - Register
 - User favorites restaurants
+- Update user data
 
 ***
 
@@ -19,7 +20,6 @@
 - NelmioCorsBundle (allows to send Cross-Origin Resource Sharing headers)
 - MySQL
 - Twig
-
 
 ***
 

@@ -150,7 +150,7 @@ class RestaurantController extends AbstractController
         }
         $dataUser[] = [
         "id" => $user->getId()
-    ];
+        ];
 
         $restaurant->removeUser($user);
         $entityManager->flush();

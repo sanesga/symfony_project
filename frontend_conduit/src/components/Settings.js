@@ -1,169 +1,18 @@
-
 import React from "react";
 import agent from "../agent";
 import { connect } from "react-redux";
 import {
   SETTINGS_SAVED,
   SETTINGS_PAGE_UNLOADED,
-  LOGOUT
+  LOGOUT,
 } from "../constants/actionTypes";
 
 
-// class SettingsForm extends React.Component {
-//   constructor(props) {
-//     super(props);
-
-//     this.state = {
-//       image: "",
-//       username: "",
-//       bio: "",
-//       email: "",
-//       password: ""
-//     };
-
-//     this.updateState = field => ev => {
-//       const state = this.state;
-//       const newState = Object.assign({}, state, { [field]: ev.target.value });
-//       this.setState(newState);
-//     };
-
-//     this.submitForm = ev => {
-//       ev.preventDefault();
-
-//       const user = Object.assign({}, this.state);
-//       if (!user.password) {
-//         delete user.password;
-//       }
-
-//       this.props.onSubmitForm(user);
-//     };
-
-//     if (this.props.currentUser) {
-
-
-//       Object.assign(this.state, {
-//         // image: this.props.currentUser[0].image || "",
-//         // username: this.props.currentUser[0].username,
-//         // bio: this.props.currentUser[0].bio,
-//         email: this.props.currentUser[0].email
-//       });
-//     }
-//   }
-
-//   // componentWillMount() {
-//   //   if (this.props.currentUser) {
-//   //     Object.assign(this.state, {
-//   //       image: this.props.currentUser.image || '',
-//   //       username: this.props.currentUser.username,
-//   //       bio: this.props.currentUser.bio,
-//   //       email: this.props.currentUser.email
-//   //     });
-//   //   }
-//   // }
-
-//   componentDidUpdate(nextProps) {
-
-//     if (nextProps.currentUser) {
-//       this.setState(
-//         Object.assign({}, this.state, {
-//           // image: nextProps.currentUser.image || "",
-//           // username: nextProps.currentUser.username,
-//           // bio: nextProps.currentUser.bio,
-//           email: nextProps.currentUser[0].email
-//         })
-//       );
-//     }
-//   }
-
-//   // componentWillReceiveProps(nextProps) {
-//   //   if (nextProps.currentUser) {
-//   //     this.setState(Object.assign({}, this.state, {
-//   //       image: nextProps.currentUser.image || '',
-//   //       username: nextProps.currentUser.username,
-//   //       bio: nextProps.currentUser.bio,
-//   //       email: nextProps.currentUser.email
-//   //     }));
-//   //   }
-//   // }
-
-//   render() {
-//     return (
-//       <form onSubmit={this.submitForm}>
-//         <fieldset>
-//           <fieldset className="form-group">
-//             <input
-//               className="form-control"
-//               type="text"
-//               placeholder="URL of profile picture"
-//               value={this.state.image}
-//               onChange={this.updateState("image")}
-//             />
-//           </fieldset>
-
-//           <fieldset className="form-group">
-//             <input
-//               className="form-control form-control-lg"
-//               type="text"
-//               placeholder="Username"
-//               value={this.state.username}
-//               onChange={this.updateState("username")}
-//             />
-//           </fieldset>
-
-//           <fieldset className="form-group">
-//             <textarea
-//               className="form-control form-control-lg"
-//               rows="8"
-//               placeholder="Short bio about you"
-//               value={this.state.bio}
-//               onChange={this.updateState("bio")}
-//             ></textarea>
-//           </fieldset>
-
-//           <fieldset className="form-group">
-//             <input
-//               className="form-control form-control-lg"
-//               type="email"
-//               placeholder="Email"
-//               value={this.state.email}
-//               onChange={this.updateState("email")}
-//             />
-//           </fieldset>
-
-//           <fieldset className="form-group">
-//             <input
-//               className="form-control form-control-lg"
-//               type="password"
-//               placeholder="New Password"
-//               value={this.state.password}
-//               onChange={this.updateState("password")}
-//             />
-//           </fieldset>
-
-//           <button
-//             className="btn btn-lg btn-primary pull-xs-right"
-//             type="submit"
-//             disabled={this.state.inProgress}
-//           >
-//             Update Settings
-//           </button>
-//         </fieldset>
-//       </form>
-//     );
-//   }
-// }
-
-// // const mapStateToProps = state => ({
-// //   ...state.settings,
-// //   currentUser: state.common.currentUser
-
-// // });
-
 const mapStateToProps = state => {
-
+  console.log(state);
   return {
     ...state.settings,
-    currentUser: state.common.currentUser
+    currentUser: state.common.currentUser,
   };
 };
 
@@ -175,43 +24,68 @@ const mapDispatchToProps = dispatch => ({
     }),
   onSubmitForm: user =>
     dispatch({ type: SETTINGS_SAVED, payload: agent.Auth.save(user) }),
-  onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: SETTINGS_PAGE_UNLOADED }),
+  onSubmit: (email) => {
+    agent.UserData.updateUserData(email);
+    dispatch({
+      type: LOGOUT,
+      payload: agent.Auth.logout()
+    })
+  },
 });
 
 class Settings extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: ''
+      };
+
+      this.guardar = this.guardar.bind(this);
+      this.updateUserData = this.updateUserData.bind(this);
+
+  }
+
+  updateUserData(ev) {
+    var email = this.state.email;
+    this.props.onSubmit(email);
+  }
+ 
+  guardar(ev) {
+    this.setState({
+      email: ev.target.value 
+    });
+  }
+
   render() {
     if (localStorage.getItem("user_data")) {
       const currentUser = JSON.parse(localStorage.getItem("user_data"));
       return (
         <div className="settings-page">
           <div className="container page">
-            <div className="row">
-              <div className="col-md-6 offset-md-3 col-xs-12">
-                <h1 className="text-xs-center">Your Settings</h1>
+            <h2 className="settings-title ">Your Settings</h2>
+            <fieldset className="form-group">
+              <label className="settings-email">Email:</label>
+              <input
+                className="form-control form-control-lg"
+                name="email"
+                type="email"
+                placeholder={currentUser.email}
+                onChange={this.guardar}
+              />
+            </fieldset>
 
-                {/* <ListErrors errors={this.props.errors}></ListErrors>
-  
-                <SettingsForm
-                  currentUser={this.props.currentUser}
-                  onSubmitForm={this.props.onSubmitForm}
-                /> */}
-
-                <fieldset className="form-group">
-                  <input
-                    className="form-control form-control-lg"
-                    type="email"
-                    placeholder={currentUser.email}
-                    // onChange={this.updateState("email")}
-                  />
-                </fieldset>
-                <hr />
-                <button
-                  className="btn btn-outline-danger"
-                  onClick={this.props.onClickLogout}
-                >
-                  Or click here to logout.
-                </button>
-              </div>
+            <div className="settings-buttons">
+              <button
+                className="btn-logout btn btn-danger"
+                onClick={this.props.onClickLogout}
+              >
+                Logout
+              </button>
+              <button className="btn btn-warning" onClick={this.updateUserData}>
+                Save changes
+              </button>
             </div>
           </div>
         </div>

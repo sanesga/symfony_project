@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+//LOGS//
+//echo "<pre>"
+//var_dump($data);
+//echo "</pre>";
+
 class RegisterController extends AbstractController {
 
     private $passwordEncoder;
@@ -20,15 +25,6 @@ class RegisterController extends AbstractController {
              $this->passwordEncoder = $passwordEncoder;
     }
     
-    public function index()
-    {
-        //aquí entra cuando entramos a localhost:8000/register
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/RegisterController.php',
-        ]);
-    }
-
      /**
      * @Route("/register", name="register")
      */
@@ -37,10 +33,6 @@ class RegisterController extends AbstractController {
        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
         $data = json_decode($request->getContent(), true);
 
-    //     echo "<pre>";
-    //     var_dump($data);
-    //   echo "</pre>";
-        
         $request->request->replace(is_array($data) ? $data : array());
 
         $em = $this->getDoctrine()->getManager();
@@ -51,7 +43,6 @@ class RegisterController extends AbstractController {
         $user = new User();
         $user->setEmail($email);
         $user->setPassword($this->passwordEncoder->encodePassword($user,$password));
-       // $user->setPassword($password);
         $user->setRoles([]);
 
         $em->persist($user);

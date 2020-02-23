@@ -55,7 +55,10 @@ const Restaurants = {
 
 };
 const UserData = {
-  get: () => requests.get("/userData")
+  get: () => requests.get("/userData"),
+  updateUserData: (email) => {
+    requests.put("/updateuser", { email: email});
+  },
 };
 
 const limit = (count, p) => `limit=${count}&offset=${p ? p * count : 0}`;

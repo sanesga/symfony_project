@@ -29,3 +29,17 @@ span{
     border-radius: 20px;
     padding: 20px;
 }
+.btn-logout{
+   
+    margin-right: 20px;
+}
+.settings-buttons{
+    margin-top: 40px;
+    text-align: center;
+}
+.settings-title{
+    margin-bottom: 40px;
+}
+.settings-email{
+    font-size: 20px;
+}

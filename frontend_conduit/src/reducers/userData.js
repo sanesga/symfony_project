@@ -10,10 +10,7 @@ export default (state = {}, action) => {
         ...state,
         data: action.payload[0].user[0]
       };
-  
     default:
       return state;
   }
-
- // return state;
 };

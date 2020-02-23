@@ -19,39 +19,39 @@ use App\Entity\User;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
+//////LOGS//////
+// echo "<pre>";
+//var_dump( $this->getUser()->getPassword());
+// echo "</pre>";
+
+
+
 class SecurityController extends AbstractController
 {
 
+    ///////////////////////////////////////LOGIN///////////////////////////////////////////
     /**
      * @Route("/login", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils, Request $request, CsrfTokenManagerInterface $tokenManager): Response
     {
-
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
+        
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
-        //recogemos el token para guardarlos en session
+        //recogemos el token para guardarlo en session
         $token = $tokenManager->getToken('authenticate')->getValue();
-
-        //los guardamos en sesion
+        //abrimos sesión
         $session = new Session();
         //no hacemos start, porque symfony ya lo realiza
         //$session->start();
-
-        //guardamos los datos
+        //guardamos el token
         $session->set('token', $token);
-        
-        //creamos el formulario y el token
+        //creamos el formulario
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
+
+    ///////////////////////////////////////LOGOUT///////////////////////////////////////////
     /**
      * @Route("/logout", name="app_logout")
      */
@@ -60,12 +60,14 @@ class SecurityController extends AbstractController
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 
+
+    ///////////////////////////////////////LOGOUT SUCCESS///////////////////////////////////////////
     /**
      * @Route("/logoutSuccess", name="app_logout_success")
      */
     public function logoutSuccess()
     {
-        //AL HACER LOGOUT BORRAMOS LOS DATOS DEL USUARIO DEL FICHERO TEMPORAL
+        //al hacer logout borramos los datos del fichero temporal
         $filesystem = new Filesystem();
          $current_dir_path = getcwd();
          $new_file_path = $current_dir_path . "file.txt";
@@ -76,28 +78,17 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    ////////////////////OBTIENE LOS DATOS DEL USUARIO GUARDADOS EN EL FICHERO TEMPORAL/////////////////////////
     /**
     * @Route("/userData", name="userData")
     */
-    public function userData(): Response //ESTE MÉTODO LEE LOS DATOS DEL USUARIO QUE HA HECHO LOGIN, QUE ESTÁN GUARDADOS EN UN FICHERO TEMPORAL
+    public function userData(): Response
     { 
-        //////////////////GUARDAR DATOS EN SESIÓN////////////////////
-        //abrimos sesión
-        // $session = new Session();
-
-        //obtenemos los datos
-        // $data = $session->get('data');
-
-        ///////////////////////////////////////////////////////////////
-
-
         //leemos los datos del fichero
         $seccion = file_get_contents('../publicfile.txt');
         //los pasamos a array
         $array = explode(";" , $seccion);
-       // var_dump($array);
-
-       
+     
         //los copiamos en el array de datos
         $data[] = [
             "email" => $array[0],
@@ -105,18 +96,13 @@ class SecurityController extends AbstractController
             "token" => $array[2]
         ];
 
-        //borramos el fichero temporal (SI BORRAMOS EL FICHERO, SI VUELVE A ENTRAR (POR EL PROMISE, DA ERROR PORQUE YA NO EXISTE, HAY QUE SOBREESCRIBIRLO))
-        //  $filesystem = new Filesystem();
-        //  $current_dir_path = getcwd();
-        //  $new_file_path = $current_dir_path . "file.txt";
-        //  $filesystem->remove([$new_file_path, 'publicfile.txt']);
-        // $filesystem->dumpFile($new_file_path,'');
-
         // devolvemos los datos en forma de json
         return new JsonResponse([
             'user' => $data
         ]);
     }
+
+    ////////////////////GUARDAMOS LOS DATOS EN UN FICHERO TEMPORAL/////////////////////////
 
     /**
     * @Route("/saveUserData", name="saveUserData")
@@ -133,56 +119,51 @@ class SecurityController extends AbstractController
         try {
             $new_file_path = $current_dir_path . "file.txt";
          
-            //if (!$fsObject->exists($new_file_path)) {
                 $fsObject->touch($new_file_path);
                 $fsObject->chmod($new_file_path, 0777);
                 $fsObject->dumpFile($new_file_path, $this->getUser()->getEmail().";".$this->getUser()->getPassword().";".$session->get('token'));
-                // $fsObject->appendToFile($new_file_path, "añado contenido.\n");
-            //}
         } catch (IOExceptionInterface $exception) {
             echo "Error creating file at". $exception->getPath();
         }
 
-        // echo "<pre>";
-        //   var_dump( $this->getUser()->getPassword());
-        // echo "</pre>";
-
-        
-        ////////////////////////////////////////GUARDAMOS EL TOKEN EN BASE DE DATOS//////////////////////////////////////
-        //     $email =  $this->getUser()->getEmail();
-        //     $session = new Session();
-        //     $token= $session->get('token');
-
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($email);
-
-        //     if (!$user) {
-        //         throw $this->createNotFoundException(
-        //             'No user found for email '.$email
-        //         );
-        //     }
-    
-        //    $user->setToken($token);
-        //    $entityManager->flush();
-
-        //    print_r($user);
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      
-        ///////////////////ESTO FUNCIONA PERO RETORNA UN ARRAY NO UN OBJETO USER////////////////////
-        // $em = $this->getDoctrine()->getManager();
-
-        // $RAW_QUERY = "SELECT * FROM user WHERE email = '$email'";
-        
-        // $statement = $em->getConnection()->prepare($RAW_QUERY);
-        // $statement->execute();
-
-        // $user = $statement->fetchAll();
-
-        ///////////////////////////////////////////////////////////////////////////
-
-
         //hacemos un redirect al frontend que irá al método userData y recuperará los datos guardados en el fichero
         return new RedirectResponse('http://localhost:3001/successLogin');
+    }
+
+    /////////////////////////////////UPDATE USER///////////////////////////
+    /**
+    * @Route("/updateuser", name="update")
+    */
+    public function update(Request $request): Response
+    {
+        if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+
+            ///////////recogemos los datos que nos envía el frontend (email)///////////////
+            $data = json_decode($request->getContent(), true);
+            $request->request->replace(is_array($data) ? $data : array());
+            $newEmail = $request->request->get('email');
+          
+            ////////////obtenemos el usuario logueado/////////////////////////////////////
+            $seccion = file_get_contents('../publicfile.txt');
+            $array = explode(";", $seccion);
+
+            $user = $this->getDoctrine()->getRepository(User::class)->findOneByEmail($array[0]);
+            if (!$user) {
+                throw $this->createNotFoundException(
+                    'No user found'
+                   
+                );
+            }
+
+            //////////////////////actualizamos el usuario en la base de datos///////////////
+            //actualizamos el email
+            $user->setEmail($newEmail);
+       
+            //guardamos en bd
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            return new Response('Updated email user with id '.$user->getId());
+        }
     }
 }
