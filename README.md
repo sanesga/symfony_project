@@ -131,8 +131,8 @@ Run:
 
 vue
 cd frontend_vue
-- npm install
+- sudo npm install
 - common/config.js: const API_URL = "https://conduit.productionready.io/api";
-$ npm run lint --fix
-$ npm run serve -- --port 3003 --host 0.0.0.0 --public 0.0.0.0:3003
+$ sudo npm run lint --fix
+$ sudo npm run serve -- --port 3003 --host 0.0.0.0 --public 0.0.0.0:3003
 - http://localhost:3003/
