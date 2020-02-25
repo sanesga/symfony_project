@@ -1,15 +1,17 @@
 # symfony/react_project
 
+Restaurants project made with a Symfony backend and 2 frontends (React and Vue).
+
 ***
 
 # Functionality
 
-- Restaurants list
-- Restaurant details
-- Login
-- Register
-- User favorites restaurants
-- Update user data
+- Restaurants list (react and vue)
+- Restaurant details (react and vue)
+- Login (react)
+- Register (react)
+- User favorites restaurants (react)
+- Update user data (react)
 
 ***
 
@@ -23,7 +25,7 @@
 
 ***
 
-## Frontend_react
+## Frontend_react (testing)
 
 - React
 - Axios (client http library for Javascript)
@@ -38,6 +40,10 @@
 - Redux
 
 ***
+
+## Frontend_vue
+
+- Vue 2.6.10
 
 ### Run backend symfony
 
@@ -107,6 +113,16 @@ Run backend:
 
 ***
 
+### Run frontend vue
+
+- cd frontend_vue
+- sudo npm install
+- sudo npm run lint --fix
+- sudo npm run serve -- --port 3003 --host 0.0.0.0 --public 0.0.0.0:3003
+- http://localhost:3003/
+
+***
+
 ### Run phpMyAdmin
 
 - http://localhost/phpmyadmin
@@ -126,13 +142,3 @@ Run:
 ### Portainer
 
 - http://localhost:9000/#/home
-
-
-
-vue
-cd frontend_vue
-- sudo npm install
-- common/config.js: const API_URL = "https://conduit.productionready.io/api";
-$ sudo npm run lint --fix
-$ sudo npm run serve -- --port 3003 --host 0.0.0.0 --public 0.0.0.0:3003
-- http://localhost:3003/
