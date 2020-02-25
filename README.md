@@ -45,6 +45,8 @@ Restaurants project made with a Symfony backend and 2 frontends (React and Vue).
 
 - Vue 2.6.10
 
+***
+
 ### Run backend symfony
 
 Install libraries:
